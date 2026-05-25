@@ -2,13 +2,26 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
 
   <title>Pink Pistols Denver</title>
 
+  <!-- SEO -->
+  <meta
+    name="description"
+    content="Pink Pistols Denver is a Colorado-based 501(c)(3) nonprofit providing LGBTQ-focused public safety education, responsible firearm ownership training, and violence prevention resources."
+  />
+
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
 
   <!-- Substitute until Zalando Sans Expanded is self-hosted -->
   <link
@@ -16,7 +29,21 @@
     rel="stylesheet"
   >
 
+  <!-- Font Awesome Icons -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+  />
+
+  <!-- Optional favicon -->
+  <link
+    rel="icon"
+    type="image/png"
+    href="favicon.png"
+  />
+
   <style>
+
     :root {
       --pink: #FF45CA;
       --blue: #185AA0;
@@ -53,6 +80,19 @@
       letter-spacing: 0.03em;
     }
 
+    /* Accessible hidden heading */
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
     header {
       background:
         linear-gradient(
@@ -75,12 +115,6 @@
       border-radius: 14px;
     }
 
-    header h1 {
-      font-size: 4rem;
-      margin-bottom: 1.2rem;
-      text-transform: uppercase;
-    }
-
     header p {
       max-width: 850px;
       margin: auto;
@@ -101,6 +135,7 @@
       text-decoration: none;
       font-weight: bold;
       margin: 0.5rem;
+
       transition:
         background 0.2s ease,
         transform 0.2s ease;
@@ -151,6 +186,7 @@
 
     .card-grid {
       display: grid;
+
       grid-template-columns:
         repeat(auto-fit, minmax(260px, 1fr));
 
@@ -163,6 +199,7 @@
       padding: 2rem;
       border-radius: 14px;
       border: 1px solid #333;
+
       transition:
         transform 0.2s ease,
         border-color 0.2s ease;
@@ -200,6 +237,14 @@
       color: var(--blue);
     }
 
+    footer {
+      text-align: center;
+      padding: 2rem;
+      background: var(--dark2);
+      color: #aaaaaa;
+      border-top: 1px solid #333;
+    }
+
     .social-footer {
       display: flex;
       justify-content: center;
@@ -211,20 +256,16 @@
     .social-footer a {
       color: var(--muted);
       text-decoration: none;
-      font-weight: bold;
-      transition: color 0.2s ease;
+      font-size: 1.8rem;
+
+      transition:
+        color 0.2s ease,
+        transform 0.2s ease;
     }
 
     .social-footer a:hover {
       color: var(--pink);
-    }
-
-    footer {
-      text-align: center;
-      padding: 2rem;
-      background: var(--dark2);
-      color: #aaaaaa;
-      border-top: 1px solid #333;
+      transform: translateY(-2px) scale(1.08);
     }
 
     @media (max-width: 700px) {
@@ -235,10 +276,6 @@
 
       .banner-logo {
         margin-bottom: 2rem;
-      }
-
-      header h1 {
-        font-size: 2.5rem;
       }
 
       header p {
@@ -253,7 +290,9 @@
       section {
         padding: 3rem 1.5rem;
       }
+
     }
+
   </style>
 </head>
 
@@ -267,7 +306,10 @@
       class="banner-logo"
     />
 
-    <h1>Pink Pistols Denver</h1>
+    <!-- Hidden semantic heading for SEO/accessibility -->
+    <h1 class="visually-hidden">
+      Pink Pistols Denver
+    </h1>
 
     <p>
       Educational programming and community outreach for LGBTQ individuals,
@@ -281,6 +323,7 @@
         class="button"
         href="https://www.tickettailor.com/events/pinkpistolsdenverchapter"
         target="_blank"
+        rel="noopener noreferrer"
       >
         Upcoming Events
       </a>
@@ -289,6 +332,7 @@
         class="button"
         href="https://www.zeffy.com/en-US/donation-form/pink-pistols-denver"
         target="_blank"
+        rel="noopener noreferrer"
       >
         Donate
       </a>
@@ -390,6 +434,7 @@
         class="button"
         href="https://www.tickettailor.com/events/pinkpistolsdenverchapter"
         target="_blank"
+        rel="noopener noreferrer"
       >
         View Upcoming Events
       </a>
@@ -414,6 +459,7 @@
         class="button"
         href="https://www.zeffy.com/en-US/donation-form/pink-pistols-denver"
         target="_blank"
+        rel="noopener noreferrer"
       >
         Donate
       </a>
@@ -432,10 +478,13 @@
     </p>
 
     <p style="margin-top:1.5rem;">
+
       Email:
+
       <a href="mailto:admin@pinkpistolsdenver.org">
         admin@pinkpistolsdenver.org
       </a>
+
     </p>
 
   </section>
@@ -447,33 +496,37 @@
       <a
         href="https://www.instagram.com/pinkpistolsdenver/"
         target="_blank"
+        rel="noopener noreferrer"
         aria-label="Instagram"
       >
-        📸 Instagram
+        <i class="fa-brands fa-instagram"></i>
       </a>
 
       <a
         href="https://www.youtube.com/@PinkPistolsDenver"
         target="_blank"
+        rel="noopener noreferrer"
         aria-label="YouTube"
       >
-        ▶️ YouTube
+        <i class="fa-brands fa-youtube"></i>
       </a>
 
       <a
         href="https://www.facebook.com/groups/pink.pistols.denver"
         target="_blank"
+        rel="noopener noreferrer"
         aria-label="Facebook"
       >
-        👥 Facebook
+        <i class="fa-brands fa-facebook"></i>
       </a>
 
       <a
         href="https://linktr.ee/pinkpistolsdenver"
         target="_blank"
+        rel="noopener noreferrer"
         aria-label="Linktree"
       >
-        🔗 Linktree
+        <i class="fa-solid fa-link"></i>
       </a>
 
     </div>
