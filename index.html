@@ -68,11 +68,11 @@
 
     .banner-logo {
       width: 100%;
-	  max-width: 1000px;
-	  height: auto;
-	  margin: 0 auto 2.5rem auto;
-	  display: block;
-	  border-radius: 14px;
+      max-width: 1000px;
+      height: auto;
+      margin: 0 auto 2.5rem auto;
+      display: block;
+      border-radius: 14px;
     }
 
     header h1 {
@@ -200,6 +200,25 @@
       color: var(--blue);
     }
 
+    .social-footer {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .social-footer a {
+      color: var(--muted);
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.2s ease;
+    }
+
+    .social-footer a:hover {
+      color: var(--pink);
+    }
+
     footer {
       text-align: center;
       padding: 2rem;
@@ -291,11 +310,9 @@
     <h2>About Us</h2>
 
     <p>
-      Pink Pistols Denver is a Colorado-based 501(c)(3) nonprofit dedicated to
-      inclusive public safety education, community outreach, and violence prevention.
-      We provide educational programming designed to support LGBTQ individuals and allies
-      through responsible firearm ownership education, safety training,
-      and community resilience initiatives.
+      Pink Pistols Denver is a Colorado-based 501(c)(3) nonprofit
+      organization dedicated to inclusive public safety education,
+      community outreach, and violence prevention.
     </p>
 
     <div class="highlight">
@@ -425,8 +442,48 @@
 
   <footer>
 
-    <p>
-      © 2026 Pink Pistols Denver • Colorado Nonprofit Organization • EIN 41-4285481
+    <div class="social-footer">
+
+      <a
+        href="https://www.instagram.com/pinkpistolsdenver/"
+        target="_blank"
+        aria-label="Instagram"
+      >
+        📸 Instagram
+      </a>
+
+      <a
+        href="https://www.youtube.com/@PinkPistolsDenver"
+        target="_blank"
+        aria-label="YouTube"
+      >
+        ▶️ YouTube
+      </a>
+
+      <a
+        href="https://www.facebook.com/groups/pink.pistols.denver"
+        target="_blank"
+        aria-label="Facebook"
+      >
+        👥 Facebook
+      </a>
+
+      <a
+        href="https://linktr.ee/pinkpistolsdenver"
+        target="_blank"
+        aria-label="Linktree"
+      >
+        🔗 Linktree
+      </a>
+
+    </div>
+
+    <p style="margin-top:1.5rem;">
+      © 2026 Pink Pistols Denver • Colorado-based 501(c)(3) nonprofit organization
+    </p>
+
+    <p style="margin-top:0.5rem; color:#888;">
+      EIN: 41-4285481
     </p>
 
   </footer>
