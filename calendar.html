@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Pink Pistols Denver Events</title>
+
+  <style>
+    :root {
+      --pink: #FF45CA;
+      --blue: #185AA0;
+      --dark: #111111;
+      --dark2: #1b1b1b;
+      --text: #f5f5f5;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--dark);
+      color: var(--text);
+    }
+
+    header {
+      background: linear-gradient(
+        135deg,
+        var(--pink),
+        var(--blue)
+      );
+      padding: 3rem 1.5rem;
+      text-align: center;
+    }
+
+    h1 {
+      margin: 0;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    main {
+      max-width: 1200px;
+      margin: auto;
+      padding: 2rem 1rem;
+    }
+
+    .calendar-container {
+      background: var(--dark2);
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid #333;
+      padding: 1rem;
+    }
+
+    iframe {
+      width: 100%;
+      height: 75vh;
+      min-height: 600px;
+      border: 0;
+      border-radius: 12px;
+      background: white;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: #aaa;
+    }
+
+    a {
+      color: var(--pink);
+    }
+
+    @media (max-width: 700px) {
+      header {
+        padding: 2rem 1rem;
+      }
+
+      iframe {
+        height: 70vh;
+        min-height: 500px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>Pink Pistols Denver Events</h1>
+</header>
+
+<main>
+
+  <div class="calendar-container">
+
+    <iframe
+      src="https://calendar.google.com/calendar/embed?src=c_213d287c1cd3b961c6a3b6c69da6e5018cbd47837ba4d87333c7d1e4a60bb728%40group.calendar.google.com&ctz=UTC"
+      scrolling="no">
+    </iframe>
+
+  </div>
+
+</main>
+
+<footer>
+  <p>
+    Pink Pistols Denver •
+    <a href="https://www.pinkpistolsdenver.org">
+      www.pinkpistolsdenver.org
+    </a>
+  </p>
+</footer>
+
+</body>
+</html>
