@@ -42,9 +42,11 @@ jobs:
           path: deploy
 
   deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     needs: build-library
     runs-on: ubuntu-latest
-
     steps:
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v4
