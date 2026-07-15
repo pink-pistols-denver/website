@@ -1,0 +1,745 @@
+:root {
+
+    --pink: #FF45CA;
+    --blue: #185AA0;
+
+    --dark: #111111;
+    --dark2: #1B1B1B;
+    --card: #202020;
+    --card-light: #292929;
+
+    --text: #F5F5F5;
+    --muted: #CFCFCF;
+
+    --success: #30C46C;
+    --warning: #FFCC33;
+    --danger: #FF5B5B;
+
+    --radius: 14px;
+    --transition: 0.20s ease;
+
+    --content-width: 900px;
+
+    --shadow:
+        0 6px 18px rgba(0,0,0,.30);
+
+}
+
+/* ==========================================================
+   RESET
+========================================================== */
+
+* {
+
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+}
+
+html {
+
+    scroll-behavior: smooth;
+
+}
+
+body {
+
+    background: var(--dark);
+    color: var(--text);
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    line-height: 1.6;
+
+}
+
+/* ==========================================================
+   TYPOGRAPHY
+========================================================== */
+
+h1,
+h2,
+h3,
+button,
+.button {
+
+    font-family:
+        "Archivo Expanded",
+        Arial,
+        sans-serif;
+
+    letter-spacing: .03em;
+
+}
+
+p {
+
+    color: var(--muted);
+
+}
+
+a {
+
+    color: var(--pink);
+
+}
+
+a:hover {
+
+    color: var(--blue);
+
+}
+
+/* ==========================================================
+   HEADER
+========================================================== */
+
+.hero {
+
+    background:
+
+        linear-gradient(
+            135deg,
+            var(--pink),
+            var(--blue)
+        );
+
+    text-align: center;
+
+    padding:
+
+        3rem
+        1.5rem
+        4rem;
+
+    border-bottom:
+
+        3px solid var(--pink);
+
+}
+
+.banner-logo {
+
+    display: block;
+
+    width: 100%;
+    max-width: 950px;
+
+    margin:
+
+        0 auto
+        2rem;
+
+    border-radius: var(--radius);
+
+}
+
+.hero h1 {
+
+    font-size: 2.5rem;
+
+    margin-bottom: 1rem;
+
+}
+
+.hero p {
+
+    max-width: 700px;
+
+    margin: auto;
+
+    color: white;
+
+    font-size: 1.1rem;
+
+}
+
+/* ==========================================================
+   LAYOUT
+========================================================== */
+
+.wizard {
+
+    width: 100%;
+
+    max-width:
+
+        var(--content-width);
+
+    margin:
+
+        3rem auto;
+
+    padding:
+
+        0 1rem
+        4rem;
+
+}
+
+#wizard-form,
+#waiver-form {
+
+    width: 100%;
+
+}
+
+.wizard-page {
+
+    display: none;
+
+    animation:
+
+        fadeIn
+        .25s ease;
+
+}
+
+.wizard-page.active {
+
+    display: block;
+
+}
+
+@keyframes fadeIn {
+
+    from {
+
+        opacity: 0;
+        transform: translateY(12px);
+
+    }
+
+    to {
+
+        opacity: 1;
+        transform: translateY(0);
+
+    }
+
+}
+
+/* ==========================================================
+   PROGRESS
+========================================================== */
+
+.progress-section {
+
+    margin-bottom: 2rem;
+
+}
+
+.progress-text {
+
+    text-align: center;
+
+    font-weight: bold;
+
+    margin-bottom: .75rem;
+
+}
+
+.progress-bar {
+
+    width: 100%;
+
+    height: 12px;
+
+    background: #333;
+
+    border-radius: 999px;
+
+    overflow: hidden;
+
+}
+
+#progress-fill {
+
+    width: 0%;
+
+    height: 100%;
+
+    background:
+
+        linear-gradient(
+            90deg,
+            var(--pink),
+            var(--blue)
+        );
+
+    transition:
+
+        width .25s ease;
+
+}
+
+/* ==========================================================
+   CARDS
+========================================================== */
+
+.notice,
+.rule-card,
+.form-card,
+.success-card {
+
+    background: var(--card);
+
+    border:
+
+        1px solid #333;
+
+    border-radius:
+
+        var(--radius);
+
+    padding: 1.5rem;
+
+    margin:
+
+        1.5rem 0;
+
+    box-shadow:
+
+        var(--shadow);
+
+}
+
+.notice {
+
+    border-left:
+
+        6px solid var(--pink);
+
+}
+
+.notice strong {
+
+    color: var(--pink);
+
+}
+
+.rule-card h3 {
+
+    color: var(--pink);
+
+    margin-bottom: 1rem;
+
+}
+
+.success-card {
+
+    text-align: center;
+
+}
+
+/* ==========================================================
+   DETAILS
+========================================================== */
+
+details {
+
+    background:
+
+        var(--card);
+
+    border:
+
+        1px solid #333;
+
+    border-radius:
+
+        var(--radius);
+
+    margin-bottom: 1rem;
+
+    overflow: hidden;
+
+}
+
+summary {
+
+    cursor: pointer;
+
+    font-weight: bold;
+
+    padding: 1rem;
+
+    list-style: none;
+
+}
+
+summary:hover {
+
+    background:
+
+        rgba(255,255,255,.04);
+
+}
+
+.legal-text {
+
+    padding:
+
+        0
+        1rem
+        1rem;
+
+    color:
+
+        var(--muted);
+
+    white-space: pre-wrap;
+
+}
+
+/* ==========================================================
+   CHECKBOX CARDS
+========================================================== */
+
+.checkbox-card {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 1rem;
+
+    background:
+
+        var(--card-light);
+
+    border:
+
+        1px solid #444;
+
+    border-radius:
+
+        var(--radius);
+
+    padding: 1rem;
+
+    margin:
+
+        1rem 0;
+
+    cursor: pointer;
+
+    transition:
+
+        var(--transition);
+
+}
+
+.checkbox-card:hover {
+
+    border-color:
+
+        var(--pink);
+
+}
+
+.checkbox-card input[type="checkbox"] {
+
+    margin-top: .25rem;
+
+    transform:
+
+        scale(1.3);
+
+    flex-shrink: 0;
+
+}
+
+.checkbox-card span {
+
+    color:
+
+        var(--text);
+
+.page-header {
+
+    margin-bottom: 2rem;
+
+}
+
+.page-step {
+
+    font-size: .85rem;
+
+    font-weight: bold;
+
+    letter-spacing: .08em;
+
+    text-transform: uppercase;
+
+    color: var(--pink);
+
+    margin-bottom: .5rem;
+
+}
+
+.page-title {
+
+    margin: 0;
+
+}
+
+/* ==========================================================
+   WIZARD NAVIGATION BUTTONS
+========================================================== */
+
+.wizard-buttons {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    gap: 1rem;
+
+    margin-top: 2rem;
+
+}
+
+.wizard-buttons:has(.wizard-button:only-child) {
+
+    justify-content: flex-end;
+
+}
+
+.wizard-button {
+
+    border: none;
+
+    border-radius: 8px;
+
+    padding: .9rem 1.75rem;
+
+    font-size: 1rem;
+
+    cursor: pointer;
+
+    transition: var(--transition);
+
+}
+
+.next-button,
+.submit-button {
+
+    background: var(--pink);
+
+    color: white;
+
+    margin-left: auto;
+
+}
+
+.next-button:hover,
+.submit-button:hover {
+
+    background: var(--blue);
+
+}
+
+.back-button {
+
+    background: transparent;
+
+    color: var(--muted);
+
+    border: 1px solid #444;
+
+}
+
+.back-button:hover {
+
+    border-color: var(--pink);
+
+    color: var(--text);
+
+}
+
+.submit-button:disabled {
+
+    opacity: .6;
+
+    cursor: not-allowed;
+
+}
+
+/* ==========================================================
+   TEXT INPUTS (signature step)
+========================================================== */
+
+.form-card {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 1.5rem;
+
+}
+
+.form-card label {
+
+    display: block;
+
+    font-weight: bold;
+
+    color: var(--text);
+
+}
+
+.form-card input[type="text"],
+.form-card input[type="email"] {
+
+    display: block;
+
+    width: 100%;
+
+    margin-top: .5rem;
+
+    padding: .75rem;
+
+    background: var(--dark2);
+
+    border: 1px solid #444;
+
+    border-radius: 8px;
+
+    color: var(--text);
+
+    font-size: 1rem;
+
+    font-family: inherit;
+
+}
+
+.form-card input[type="text"]:focus,
+.form-card input[type="email"]:focus {
+
+    outline: none;
+
+    border-color: var(--pink);
+
+}
+
+.signature-timestamp {
+
+    background: var(--card-light);
+
+    border: 1px solid #444;
+
+    border-radius: var(--radius);
+
+    padding: 1rem;
+
+}
+
+.signature-timestamp strong {
+
+    display: block;
+
+    color: var(--pink);
+
+    margin-bottom: .35rem;
+
+}
+
+.signature-timestamp span {
+
+    color: var(--muted);
+
+    font-size: .9rem;
+
+}
+
+/* ==========================================================
+   FIELD / PAGE ERRORS
+========================================================== */
+
+.field-error {
+
+    display: block;
+
+    color: var(--danger);
+
+    font-size: .85rem;
+
+    margin-top: .4rem;
+
+}
+
+input.validation-error {
+
+    border: 1px solid var(--danger) !important;
+
+}
+
+.checkbox-card.validation-error {
+
+    border-color: var(--danger);
+
+}
+
+.validation-message {
+
+    background: rgba(255, 91, 91, .12);
+
+    border: 1px solid var(--danger);
+
+    color: var(--danger);
+
+    border-radius: var(--radius);
+
+    padding: 1rem;
+
+    margin-top: 1.5rem;
+
+    font-weight: bold;
+
+    text-align: center;
+
+}
+
+/* ==========================================================
+   SUCCESS PAGE CTA
+========================================================== */
+
+.success-card .button {
+
+    display: inline-block;
+
+    background: var(--pink);
+
+    color: white;
+
+    padding: 1rem 1.5rem;
+
+    border-radius: 8px;
+
+    text-decoration: none;
+
+    margin-top: 1.5rem;
+
+}
+
+.success-card .button:hover {
+
+    background: var(--blue);
+
+}
+
+#confirmation-number {
+
+    color: var(--pink);
+
+    margin: 1rem 0;
+
+    font-size: 1.5rem;
+
+}
