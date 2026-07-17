@@ -33,7 +33,7 @@ jobs:
       - name: Prepare deploy directory
         run: |
           mkdir -p deploy/library
-          cp -r index.html calendar.html assets deploy/
+          cp -r index.html calendar.html assets waiver deploy/
           cp -r library/site/* deploy/library/
 
       - name: Upload Pages artifact
