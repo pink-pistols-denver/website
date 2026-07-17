@@ -8,7 +8,7 @@ const CONFIG = {
 
     confirmationPrefix: "PPD",
 
-    apiEndpoint: "",
+    apiEndpoint: "https://us-central1-pinkpistolsdenver-website.cloudfunctions.net/submitWaiver",
 
     scrollBehavior: "smooth"
 
@@ -676,9 +676,6 @@ async function handleSubmit(event) {
 
         payload.metadata = {
 
-            confirmationNumber:
-                generateConfirmationNumber(),
-
             submittedAt:
                 new Date().toISOString(),
 
@@ -698,10 +695,11 @@ async function handleSubmit(event) {
 
         };
 
-        await postToGoogleCloud(payload);
+        const result =
+            await postToGoogleCloud(payload);
 
         showSuccessPage(
-            payload.metadata.confirmationNumber
+            result.confirmationNumber
         );
 
     }
@@ -725,6 +723,12 @@ async function handleSubmit(event) {
 
 /* ==========================================================
    Confirmation Numbers
+
+   The Cloud Function generates the authoritative
+   confirmation number and checks it for uniqueness
+   against Firestore. This client-side generator is
+   only used as a stand-in while CONFIG.apiEndpoint
+   is unset (Developer Mode).
 ========================================================== */
 
 function generateConfirmationNumber() {
@@ -764,7 +768,8 @@ async function postToGoogleCloud(payload) {
         Development mode
 
         If no endpoint is configured,
-        simply log the payload.
+        log the payload locally and return
+        a stand-in confirmation number.
     */
 
     if (!CONFIG.apiEndpoint) {
@@ -781,7 +786,10 @@ async function postToGoogleCloud(payload) {
             setTimeout(resolve, 750)
         );
 
-        return;
+        return {
+            confirmationNumber:
+                generateConfirmationNumber()
+        };
 
     }
 
@@ -811,9 +819,16 @@ async function postToGoogleCloud(payload) {
 
     if (!response.ok) {
 
+        const errorBody =
+
+            await response
+                .json()
+                .catch(() => null);
+
         throw new Error(
 
-            `Server returned ${response.status}`
+            errorBody?.error ??
+                `Server returned ${response.status}`
 
         );
 
