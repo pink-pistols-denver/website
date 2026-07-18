@@ -1,0 +1,18 @@
+{
+  "name": "pink-pistols-denver-waiver-function",
+  "version": "1.0.0",
+  "description": "Cloud Function that validates and records Pink Pistols Denver event waivers in Firestore.",
+  "main": "index.js",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "functions-framework --target=submitWaiver",
+    "deploy": "gcloud functions deploy submitWaiver --gen2 --runtime=nodejs22 --region=us-central1 --source=. --entry-point=submitWaiver --trigger-http --memory=256Mi --max-instances=10"
+  },
+  "dependencies": {
+    "@google-cloud/functions-framework": "^3.4.0",
+    "@google-cloud/firestore": "^7.10.0",
+    "firebase-admin": "^12.7.0"
+  }
+}

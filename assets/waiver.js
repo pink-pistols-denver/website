@@ -6,13 +6,70 @@
 
 const CONFIG = {
 
-    confirmationPrefix: "PPD",
-
     apiEndpoint: "https://us-central1-pinkpistolsdenver-website.cloudfunctions.net/submitWaiver",
 
     scrollBehavior: "smooth"
 
 };
+
+/* ==========================================================
+   Firebase App Check
+
+   Verifies submissions come from this real page (via
+   invisible reCAPTCHA v3 scoring) before the Cloud Function
+   touches Firestore. The API key and site key below are
+   meant to be public — App Check's security model doesn't
+   depend on hiding them, only on the reCAPTCHA secret key
+   never being exposed, which never appears in client code.
+========================================================== */
+
+const firebaseConfig = {
+    apiKey: "AIzaSyCV2ZNL-kbuH1K2JuUWIGjaOdDb7_oXvlQ",
+    authDomain: "pinkpistolsdenver-website.firebaseapp.com",
+    projectId: "pinkpistolsdenver-website",
+    storageBucket: "pinkpistolsdenver-website.firebasestorage.app",
+    messagingSenderId: "323323001620",
+    appId: "1:323323001620:web:a8f44b80b2b89de4896001",
+    measurementId: "G-E1XQC6GXT2"
+};
+
+let appCheck = null;
+
+try {
+
+    if (typeof firebase !== "undefined") {
+
+        firebase.initializeApp(firebaseConfig);
+
+        appCheck = firebase.appCheck();
+
+        appCheck.activate(
+            new firebase.appCheck.ReCaptchaV3Provider(
+                "6Leea1ktAAAAAPctjPpl22liUSswjPbwyduLFV6B"
+            ),
+            true // isTokenAutoRefreshEnabled
+        );
+
+    }
+
+    else {
+
+        console.warn(
+            "Firebase SDK did not load — App Check disabled for this session."
+        );
+
+    }
+
+}
+
+catch (error) {
+
+    console.warn(
+        "App Check initialization failed:",
+        error
+    );
+
+}
 
 /* ==========================================================
    Application State
@@ -722,74 +779,43 @@ async function handleSubmit(event) {
 }
 
 /* ==========================================================
-   Confirmation Numbers
-
-   The Cloud Function generates the authoritative
-   confirmation number and checks it for uniqueness
-   against Firestore. This client-side generator is
-   only used as a stand-in while CONFIG.apiEndpoint
-   is unset (Developer Mode).
-========================================================== */
-
-function generateConfirmationNumber() {
-
-    const now = new Date();
-
-    const datePart =
-
-        now.toISOString()
-            .slice(2, 10)
-            .replace(/-/g, "");
-
-    const randomBytes =
-        new Uint32Array(1);
-
-    crypto.getRandomValues(
-        randomBytes
-    );
-
-    const randomPart =
-
-        String(
-            randomBytes[0] % 1000000
-        ).padStart(6, "0");
-
-    return `${CONFIG.confirmationPrefix}-${datePart}-${randomPart}`;
-
-}
-
-/* ==========================================================
    Google Cloud Function
 ========================================================== */
 
 async function postToGoogleCloud(payload) {
 
-    /*
-        Development mode
+    const headers = {
 
-        If no endpoint is configured,
-        log the payload locally and return
-        a stand-in confirmation number.
-    */
+        "Content-Type":
+            "application/json"
 
-    if (!CONFIG.apiEndpoint) {
+    };
 
-        console.group(
-            "Waiver Payload"
+    try {
+
+        if (appCheck) {
+
+            const appCheckTokenResult =
+                await appCheck.getToken();
+
+            headers["X-Firebase-AppCheck"] =
+                appCheckTokenResult.token;
+
+        }
+
+    }
+
+    catch (error) {
+
+        // Fail open here — if App Check can't
+        // load (network issue, blocked script),
+        // let the request through without a token.
+        // The Cloud Function's rollout mode decides
+        // whether that's acceptable.
+        console.warn(
+            "Could not get App Check token:",
+            error
         );
-
-        console.log(payload);
-
-        console.groupEnd();
-
-        await new Promise(resolve =>
-            setTimeout(resolve, 750)
-        );
-
-        return {
-            confirmationNumber:
-                generateConfirmationNumber()
-        };
 
     }
 
@@ -803,12 +829,7 @@ async function postToGoogleCloud(payload) {
 
                 method: "POST",
 
-                headers: {
-
-                    "Content-Type":
-                        "application/json"
-
-                },
+                headers,
 
                 body:
                     JSON.stringify(payload)

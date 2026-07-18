@@ -1,0 +1,42 @@
+{
+  "version": "2026-07-15",
+  "participant": {
+    "legalName": "Jane Test Doe",
+    "email": "jane.test@example.com",
+    "electronicSignature": "Someone Else",
+    "electronicSignatureCertification": true
+  },
+  "acknowledgements": {
+    "assumptionOfRisk": true,
+    "releaseAndWaiver": true,
+    "consideration": true,
+    "lostOrStolenProperty": true,
+    "removalFromEvents": true,
+    "indemnification": true,
+    "medicalConsent": true,
+    "governingLaw": true,
+    "termOfAgreement": true,
+    "disputeResolution": true,
+    "limitationOfLiability": true
+  },
+  "safetyRules": {
+    "safeDirection": true,
+    "fingerOffTrigger": true,
+    "keepUnloaded": true,
+    "eyeAndEarProtection": true,
+    "followInstructorCommands": true
+  },
+  "affirmations": {
+    "over18": true,
+    "notProhibited": true,
+    "notImpaired": true,
+    "capableToParticipate": true,
+    "ceaseFireAuthority": true
+  },
+  "metadata": {
+    "submittedAt": "2026-07-17T12:00:00.000Z",
+    "userAgent": "curl-local-test",
+    "language": "en-US",
+    "timezone": "America/Denver"
+  }
+}

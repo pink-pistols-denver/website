@@ -1,0 +1,18 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Waiver records are only ever written by the Cloud
+    // Function via the Admin SDK, which bypasses these rules
+    // entirely. This rule exists as defense in depth, so that
+    // if a Firebase client SDK is ever added to the site later
+    // (e.g. a future instructor dashboard), it can't read or
+    // write waiver data unless these rules are deliberately
+    // updated and paired with real authentication.
+    match /waivers/{confirmationNumber} {
+      allow read, write: if false;
+    }
+
+  }
+}
