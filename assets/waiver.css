@@ -460,6 +460,8 @@ summary:hover {
 
         var(--text);
 
+}
+
 .page-header {
 
     margin-bottom: 2rem;
@@ -516,31 +518,60 @@ summary:hover {
 
     border-radius: 8px;
 
-    padding: .9rem 1.75rem;
+    padding: .9rem 1.85rem;
 
     font-size: 1rem;
 
+    font-weight: 700;
+
+    letter-spacing: .02em;
+
     cursor: pointer;
 
-    transition: var(--transition);
+    transition: var(--transition), transform var(--transition);
 
 }
 
 .next-button,
 .submit-button {
 
-    background: var(--pink);
+    background: linear-gradient(
+        135deg,
+        var(--pink),
+        var(--blue)
+    );
 
     color: white;
 
     margin-left: auto;
+
+    box-shadow: var(--shadow);
 
 }
 
 .next-button:hover,
 .submit-button:hover {
 
-    background: var(--blue);
+    transform: translateY(-2px);
+
+    box-shadow: 0 10px 22px rgba(0, 0, 0, .38);
+
+}
+
+.next-button:active,
+.submit-button:active {
+
+    transform: translateY(0);
+
+}
+
+.next-button:focus-visible,
+.submit-button:focus-visible,
+.back-button:focus-visible {
+
+    outline: 2px solid var(--pink);
+
+    outline-offset: 3px;
 
 }
 
@@ -559,6 +590,45 @@ summary:hover {
     border-color: var(--pink);
 
     color: var(--text);
+
+}
+
+@media (max-width: 700px) {
+
+    .wizard-buttons {
+
+        flex-direction: column-reverse;
+
+    }
+
+    .wizard-button {
+
+        width: 100%;
+
+        min-height: 48px;
+
+        font-size: 1.05rem;
+
+    }
+
+    .next-button,
+    .submit-button {
+
+        margin-left: 0;
+
+    }
+
+    .success-card .button {
+
+        display: block;
+
+        width: 100%;
+
+        min-height: 48px;
+
+        box-sizing: border-box;
+
+    }
 
 }
 
@@ -628,49 +698,23 @@ summary:hover {
 
 }
 
-.signature-timestamp {
-
-    background: var(--card-light);
-
-    border: 1px solid #444;
-
-    border-radius: var(--radius);
-
-    padding: 1rem;
-
-}
-
-.signature-timestamp strong {
-
-    display: block;
-
-    color: var(--pink);
-
-    margin-bottom: .35rem;
-
-}
-
-.signature-timestamp span {
-
-    color: var(--muted);
-
-    font-size: .9rem;
-
-}
-
 /* ==========================================================
    FIELD / PAGE ERRORS
 ========================================================== */
 
 .field-error {
 
-    display: block;
-
     color: var(--danger);
 
     font-size: .85rem;
 
     margin-top: .4rem;
+
+}
+
+.field-error:not([hidden]) {
+
+    display: block;
 
 }
 
@@ -714,15 +758,25 @@ input.validation-error {
 
     display: inline-block;
 
-    background: var(--pink);
+    background: linear-gradient(
+        135deg,
+        var(--pink),
+        var(--blue)
+    );
 
     color: white;
 
-    padding: 1rem 1.5rem;
+    font-weight: 700;
+
+    padding: 1rem 1.75rem;
 
     border-radius: 8px;
 
     text-decoration: none;
+
+    box-shadow: var(--shadow);
+
+    transition: var(--transition), transform var(--transition);
 
     margin-top: 1.5rem;
 
@@ -730,7 +784,9 @@ input.validation-error {
 
 .success-card .button:hover {
 
-    background: var(--blue);
+    transform: translateY(-2px);
+
+    box-shadow: 0 10px 22px rgba(0, 0, 0, .38);
 
 }
 
