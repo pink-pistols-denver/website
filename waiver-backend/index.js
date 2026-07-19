@@ -30,9 +30,9 @@ admin.initializeApp({
    verified in the logs, then switch to "enforce" and redeploy.
 ========================================================== */
 
-const CURRENT_WAIVER_VERSION = "2026-07-15";
+const CURRENT_WAIVER_VERSION = "2026-07-18.2";
 
-const APP_CHECK_MODE = "monitor";
+const APP_CHECK_MODE = "enforce";
 
 const ALLOWED_ORIGINS = new Set([
     "https://pinkpistolsdenver.org",

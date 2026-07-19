@@ -81,6 +81,8 @@ const state = {
 
 };
 
+let lastWaiverSummaryHTML = null;
+
 /* ==========================================================
    UI References
 ========================================================== */
@@ -134,6 +136,8 @@ function initialize() {
     initializePageHeaders();
 
     initializeButtons();
+
+    initializeWaiverDownload();
 
     showPage(0);
 
@@ -752,8 +756,25 @@ async function handleSubmit(event) {
 
         };
 
+        // Captured from the DOM now, while the wizard pages
+        // are still intact — this becomes the actual content
+        // of the downloadable/printable waiver copy, so it
+        // reflects exactly what this participant read and
+        // agreed to, independent of any later edits to the
+        // live site's text.
+        const waiverContent =
+            captureWaiverContent();
+
         const result =
             await postToGoogleCloud(payload);
+
+        lastWaiverSummaryHTML =
+
+            buildWaiverSummaryHTML(
+                payload,
+                result.confirmationNumber,
+                waiverContent
+            );
 
         showSuccessPage(
             result.confirmationNumber
@@ -856,6 +877,256 @@ async function postToGoogleCloud(payload) {
     }
 
     return response.json();
+
+}
+
+/* ==========================================================
+   Waiver Copy (Download / Print)
+
+   Builds a standalone, self-contained HTML document
+   reflecting exactly what this participant read and
+   agreed to — captured from the live DOM at signing
+   time, not reconstructed later from whatever text
+   happens to be on the site. This keeps old signers'
+   copies accurate even if the waiver text is revised
+   afterward.
+========================================================== */
+
+function captureWaiverContent() {
+
+    const sections = [];
+
+    ui.pages.forEach(page => {
+
+        const detailsBlocks =
+            Array.from(
+                page.querySelectorAll("details")
+            );
+
+        const legalTexts =
+
+            detailsBlocks
+                .map(details => ({
+
+                    title:
+                        details
+                            .querySelector("summary")
+                            ?.textContent.trim() ?? "",
+
+                    text:
+                        details
+                            .querySelector(".legal-text")
+                            ?.textContent.trim() ?? ""
+
+                }))
+                .filter(item => item.text);
+
+        const checkboxLabels =
+
+            Array.from(
+                page.querySelectorAll(".checkbox-card span")
+            )
+                .map(span => span.textContent.trim())
+                .filter(Boolean);
+
+        if (legalTexts.length === 0 && checkboxLabels.length === 0) {
+            return;
+        }
+
+        sections.push({
+
+            title: page.dataset.title ?? "",
+
+            legalTexts,
+
+            checkboxLabels
+
+        });
+
+    });
+
+    return sections;
+
+}
+
+function buildWaiverSummaryHTML(
+
+    payload,
+    confirmationNumber,
+    sections
+
+) {
+
+    const submittedDate =
+
+        new Date(payload.metadata.submittedAt);
+
+    const formattedDate =
+
+        submittedDate.toLocaleString("en-US", {
+            dateStyle: "long",
+            timeStyle: "short"
+        });
+
+    const sectionsHTML =
+
+        sections.map(section => {
+
+            const legalHTML =
+
+                section.legalTexts
+                    .map(item => `
+                        <h3>${escapeHTML(item.title)}</h3>
+                        <p class="legal-body">${escapeHTML(item.text)}</p>
+                    `)
+                    .join("");
+
+            const checklistHTML =
+
+                section.checkboxLabels.length
+                    ? `<ul>${
+                        section.checkboxLabels
+                            .map(label => `<li>${escapeHTML(label)}</li>`)
+                            .join("")
+                    }</ul>`
+                    : "";
+
+            return `
+                <section>
+                    <h2>${escapeHTML(section.title)}</h2>
+                    ${legalHTML}
+                    ${checklistHTML}
+                </section>
+            `;
+
+        }).join("");
+
+    const emailRow =
+
+        payload.participant.email
+            ? `<div><strong>Email:</strong> ${escapeHTML(payload.participant.email)}</div>`
+            : "";
+
+    return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Waiver ${escapeHTML(confirmationNumber)}</title>
+<style>
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        color: #111;
+        max-width: 800px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+        line-height: 1.5;
+    }
+    h1 { font-size: 1.5rem; }
+    h2 {
+        font-size: 1.15rem;
+        margin-top: 2rem;
+        border-bottom: 1px solid #ccc;
+        padding-bottom: .25rem;
+    }
+    h3 { font-size: 1rem; margin-top: 1rem; margin-bottom: .25rem; }
+    .legal-body { white-space: pre-wrap; color: #333; }
+    .meta {
+        background: #f5f5f5;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    .meta div { margin-bottom: .35rem; }
+    ul { margin: .5rem 0 .5rem 1.25rem; }
+    footer { margin-top: 2rem; font-size: .85rem; color: #666; }
+</style>
+</head>
+<body>
+    <h1>Pink Pistols Denver — Event Waiver</h1>
+    <div class="meta">
+        <div><strong>Confirmation Number:</strong> ${escapeHTML(confirmationNumber)}</div>
+        <div><strong>Waiver Version:</strong> ${escapeHTML(payload.version)}</div>
+        <div><strong>Legal Name:</strong> ${escapeHTML(payload.participant.legalName)}</div>
+        ${emailRow}
+        <div><strong>Electronic Signature:</strong> ${escapeHTML(payload.participant.electronicSignature)}</div>
+        <div><strong>Signed:</strong> ${escapeHTML(formattedDate)}</div>
+    </div>
+    ${sectionsHTML}
+    <footer>
+        This is a copy of the waiver you completed and
+        electronically signed. Please retain it for your
+        records.
+    </footer>
+</body>
+</html>`;
+
+}
+
+function escapeHTML(value) {
+
+    const div =
+        document.createElement("div");
+
+    div.textContent = value ?? "";
+
+    return div.innerHTML;
+
+}
+
+function initializeWaiverDownload() {
+
+    const downloadButton =
+        document.getElementById(
+            "download-waiver-button"
+        );
+
+    downloadButton.addEventListener(
+        "click",
+        () => {
+
+            if (!lastWaiverSummaryHTML) {
+                return;
+            }
+
+            const confirmationNumber =
+
+                document
+                    .getElementById(
+                        "confirmation-number"
+                    )
+                    .textContent
+                    .trim();
+
+            const blob =
+
+                new Blob(
+                    [lastWaiverSummaryHTML],
+                    { type: "text/html" }
+                );
+
+            const url =
+                URL.createObjectURL(blob);
+
+            const link =
+                document.createElement("a");
+
+            link.href = url;
+
+            link.download =
+                `waiver-${confirmationNumber}.html`;
+
+            document.body.appendChild(link);
+
+            link.click();
+
+            document.body.removeChild(link);
+
+            URL.revokeObjectURL(url);
+
+        }
+
+    );
 
 }
 
