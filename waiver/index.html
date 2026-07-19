@@ -32,6 +32,8 @@
 
 <body>
 
+<a href="#waiver-form" class="skip-link">Skip to waiver form</a>
+
 <header class="hero">
 
     <img
@@ -62,7 +64,9 @@
 
 <section class="progress-section">
 
-    <div class="progress-text">
+    <div
+        class="progress-text"
+        aria-live="polite">
 
         Step
         <span id="current-step">1</span>
@@ -73,7 +77,13 @@
 
     </div>
 
-    <div class="progress-bar">
+    <div
+        class="progress-bar"
+        role="progressbar"
+        aria-valuemin="0"
+        aria-valuemax="7"
+        aria-valuenow="1"
+        aria-label="Waiver completion progress">
 
         <div id="progress-fill"></div>
 
@@ -1009,11 +1019,13 @@ In the event of any suit against Released Parties that is determined not to be b
                 autocomplete="off"
                 maxlength="100"
                 data-validation-group="page"
+                aria-describedby="signature-mismatch"
                 required>
 
             <span
                 id="signature-mismatch"
                 class="field-error"
+                role="alert"
                 hidden>
 
                 This doesn't match the legal name entered above.
@@ -1085,7 +1097,7 @@ In the event of any suit against Released Parties that is determined not to be b
 
     <div class="success-card">
 
-        <h2>
+        <h2 tabindex="-1" id="success-heading">
 
             Waiver Submitted
 

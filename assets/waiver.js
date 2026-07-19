@@ -105,6 +105,9 @@ const ui = {
     progressFill:
         document.getElementById("progress-fill"),
 
+    progressBar:
+        document.querySelector(".progress-bar"),
+
     currentStep:
         document.getElementById("current-step"),
 
@@ -139,7 +142,7 @@ function initialize() {
 
     initializeWaiverDownload();
 
-    showPage(0);
+    showPage(0, false);
 
 }
 
@@ -155,9 +158,18 @@ function initializePageHeaders() {
 
             `Step ${index + 1} of ${ui.pages.length}`;
 
-        page.querySelector(".page-title").textContent =
+        const titleElement =
+            page.querySelector(".page-title");
+
+        titleElement.textContent =
 
             page.dataset.title ?? "";
+
+        // Not a natively focusable element, but we move
+        // keyboard/screen-reader focus here on every page
+        // change (see showPage) so users aren't stranded
+        // on a now-hidden button after clicking Continue.
+        titleElement.tabIndex = -1;
 
         page.querySelector(".page-subtitle").textContent =
 
@@ -171,7 +183,7 @@ function initializePageHeaders() {
    Navigation
 ========================================================== */
 
-function showPage(index) {
+function showPage(index, moveFocus = true) {
 
     ui.pages.forEach(page =>
 
@@ -192,6 +204,14 @@ function showPage(index) {
         behavior: CONFIG.scrollBehavior
 
     });
+
+    if (moveFocus) {
+
+        ui.pages[index]
+            .querySelector(".page-title")
+            .focus();
+
+    }
 
 }
 
@@ -243,19 +263,25 @@ function previousPage() {
 
 function updateProgress() {
 
+    const currentStepNumber =
+        state.currentPage + 1;
+
+    const currentTitle =
+        ui.pages[state.currentPage].dataset.title ?? "";
+
     ui.currentStep.textContent =
 
-        state.currentPage + 1;
+        currentStepNumber;
 
     ui.currentStepTitle.textContent =
 
-        ui.pages[state.currentPage].dataset.title ?? "";
+        currentTitle;
 
     const percent =
 
         (
 
-            (state.currentPage + 1)
+            currentStepNumber
 
             /
 
@@ -266,6 +292,21 @@ function updateProgress() {
     ui.progressFill.style.width =
 
         `${percent}%`;
+
+    ui.progressBar.setAttribute(
+        "aria-valuemax",
+        ui.pages.length
+    );
+
+    ui.progressBar.setAttribute(
+        "aria-valuenow",
+        currentStepNumber
+    );
+
+    ui.progressBar.setAttribute(
+        "aria-valuetext",
+        `Step ${currentStepNumber} of ${ui.pages.length} — ${currentTitle}`
+    );
 
 }
 
@@ -509,6 +550,11 @@ function markInvalid(field) {
 
         );
 
+        field.setAttribute(
+            "aria-invalid",
+            "true"
+        );
+
     }
 
 }
@@ -523,15 +569,19 @@ function clearValidation() {
 
         )
 
-        .forEach(element =>
+        .forEach(element => {
 
             element.classList.remove(
 
                 "validation-error"
 
-            )
+            );
 
-        );
+            element.removeAttribute(
+                "aria-invalid"
+            );
+
+        });
 
     document
 
@@ -564,6 +614,8 @@ function showValidationMessage(
     div.className =
 
         "validation-message";
+
+    div.setAttribute("role", "alert");
 
     div.textContent =
 
@@ -1157,6 +1209,16 @@ function showSuccessPage(
     ui.currentStepTitle.textContent =
         "Submitted";
 
+    ui.progressBar.setAttribute(
+        "aria-valuenow",
+        ui.pages.length
+    );
+
+    ui.progressBar.setAttribute(
+        "aria-valuetext",
+        "Waiver submitted"
+    );
+
     document
         .getElementById(
             "confirmation-number"
@@ -1172,6 +1234,10 @@ function showSuccessPage(
             CONFIG.scrollBehavior
 
     });
+
+    document
+        .getElementById("success-heading")
+        .focus();
 
 }
 
@@ -1241,38 +1307,9 @@ document.addEventListener(
 
 /* ==========================================================
    Future Enhancements
+
+   See the "Roadmap" section in the Cloud Function's
+   README.md for the full status of planned, deferred,
+   and deliberately-dropped features — kept there instead
+   of here so it's visible without having to read source.
 ========================================================== */
-
-/*
-
-Roadmap
-
-□ Instructor authentication
-
-□ Event selection
-
-□ Event capacity lookup
-
-□ QR-code check-in
-
-□ Firestore persistence
-
-□ Signed PDF generation
-
-□ Email confirmation
-
-□ Instructor dashboard
-
-□ Search by confirmation number
-
-□ Waiver version history
-
-□ Emergency contact information
-
-□ Minor / guardian workflow
-
-□ WCAG accessibility audit
-
-□ Offline service-worker support
-
-*/

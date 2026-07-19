@@ -1,6 +1,7 @@
 :root {
 
     --pink: #FF45CA;
+    --pink-on-white: #B2308D;
     --blue: #185AA0;
 
     --dark: #111111;
@@ -95,6 +96,64 @@ a:hover {
 }
 
 /* ==========================================================
+   SKIP LINK
+========================================================== */
+
+.skip-link {
+
+    position: absolute;
+
+    width: 1px;
+
+    height: 1px;
+
+    margin: -1px;
+
+    padding: 0;
+
+    overflow: hidden;
+
+    clip: rect(0, 0, 0, 0);
+
+    white-space: nowrap;
+
+    border: 0;
+
+}
+
+.skip-link:focus {
+
+    width: auto;
+
+    height: auto;
+
+    margin: 0;
+
+    overflow: visible;
+
+    clip: auto;
+
+    top: 1rem;
+
+    left: 1rem;
+
+    background: var(--pink-on-white);
+
+    color: white;
+
+    padding: .75rem 1.25rem;
+
+    border-radius: 8px;
+
+    font-weight: 700;
+
+    text-decoration: none;
+
+    z-index: 1000;
+
+}
+
+/* ==========================================================
    HEADER
 ========================================================== */
 
@@ -104,7 +163,7 @@ a:hover {
 
         linear-gradient(
             135deg,
-            var(--pink),
+            var(--pink-on-white),
             var(--blue)
         );
 
@@ -490,6 +549,16 @@ summary:hover {
 
 }
 
+.page-title:focus {
+
+    outline: none;
+
+    box-shadow: 0 0 0 3px rgba(255, 69, 202, .35);
+
+    border-radius: 4px;
+
+}
+
 /* ==========================================================
    WIZARD NAVIGATION BUTTONS
 ========================================================== */
@@ -537,7 +606,7 @@ summary:hover {
 
     background: linear-gradient(
         135deg,
-        var(--pink),
+        var(--pink-on-white),
         var(--blue)
     );
 
@@ -696,6 +765,8 @@ summary:hover {
 
     border-color: var(--pink);
 
+    box-shadow: 0 0 0 3px rgba(255, 69, 202, .35);
+
 }
 
 /* ==========================================================
@@ -798,7 +869,7 @@ input.validation-error {
 
     background: linear-gradient(
         135deg,
-        var(--pink),
+        var(--pink-on-white),
         var(--blue)
     );
 
@@ -835,5 +906,38 @@ input.validation-error {
     margin: 1rem 0;
 
     font-size: 1.5rem;
+
+}
+
+/* ==========================================================
+   REDUCED MOTION
+
+   Respects the user's OS-level preference for reduced
+   motion — disables the page-change fade/slide and the
+   button hover-lift, which are the only non-essential
+   animations on this page.
+========================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .wizard-page {
+
+        animation: none;
+
+    }
+
+    .next-button:hover,
+    .submit-button:hover,
+    .success-card .button:hover {
+
+        transform: none;
+
+    }
+
+    * {
+
+        transition-duration: 0.01ms !important;
+
+    }
 
 }

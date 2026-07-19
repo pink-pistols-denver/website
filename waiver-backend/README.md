@@ -322,11 +322,47 @@ message. If that turns out to be a real problem in practice, the
 `APP_CHECK_MODE` toggle lets you drop back to `"monitor"` without
 touching any other code.
 
-## Not yet handled here
+## Roadmap
 
-- **Abuse protection.** There's no reCAPTCHA/App Check yet, and no rate
-  limiting beyond `--max-instances`. Fine for now per your plan to layer
-  security on after the basic workflow works end-to-end — just don't
-  forget it before this goes live for a real event.
-- **Email confirmation / PDF generation** — still on your roadmap in
-  `waiver.js`, not part of this function.
+### Done
+
+- ✓ Firestore persistence
+- ✓ App Check + reCAPTCHA v3 (enforced)
+- ✓ WCAG accessibility audit
+
+### Not planned (deliberately decided against, not overlooked)
+
+- **Instructor authentication** — lead/admin access via a Google
+  Sign-In allowlist is enough at this scale
+- **Instructor dashboard**
+- **QR-code check-in**
+- **Waiver version history search**
+- **Offline service-worker support** — worst case, use a paper waiver
+- **Minor / guardian workflow** — handled via paper waiver, not the
+  website, going forward
+- **Automated billing kill-switch** (Pub/Sub-triggered auto-disable) —
+  the existing budget alert plus the bounded worst-case cost from
+  `--max-instances` is sufficient
+
+### Post-1.0 (deferred, not dropped)
+
+- **Trusted-lead lookup/check-in tool** for the waivers collection.
+  Trust model: all board members + leads (~10 known individuals)
+  should have access. Suggested low-effort approach when this gets
+  built: Google Sign-In restricted to an allowlist of their emails,
+  rather than building real user management.
+- **Event selection / association per submission** — a prerequisite
+  for the lookup tool above, and for real email confirmation (right
+  now there's no way to know which event a given waiver belongs to).
+- **Event capacity lookup**
+- **Search by confirmation number**
+- **Email confirmation email** — no timeline, but not dropped. The
+  Download button on the success page covers "get a copy of what you
+  signed" for now without needing an email service at all.
+- **Signed PDF generation**
+- **Emergency contact information** — good idea, but needs careful
+  design given the LGBTQ community context (e.g. a contact may not be
+  supportive of or aware of someone's participation).
+- **Waiver retention policy** (e.g. keep on file ~1 year) — a policy
+  decision, not a technical one; nothing currently expires Firestore
+  records automatically.
