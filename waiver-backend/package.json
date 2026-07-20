@@ -8,11 +8,15 @@
   },
   "scripts": {
     "start": "functions-framework --target=submitWaiver",
-    "deploy": "gcloud functions deploy submitWaiver --gen2 --runtime=nodejs22 --region=us-central1 --source=. --entry-point=submitWaiver --trigger-http --memory=256Mi --max-instances=10"
+    "deploy": "gcloud functions deploy submitWaiver --gen2 --runtime=nodejs22 --region=us-central1 --source=. --entry-point=submitWaiver --trigger-http --memory=256Mi --max-instances=10",
+    "generate-qr": "node generate-qr.js"
   },
   "dependencies": {
     "@google-cloud/functions-framework": "^3.4.0",
     "@google-cloud/firestore": "^7.10.0",
     "firebase-admin": "^12.7.0"
+  },
+  "devDependencies": {
+    "qrcode": "^1.5.4"
   }
 }

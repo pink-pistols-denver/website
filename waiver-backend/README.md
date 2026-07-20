@@ -322,6 +322,37 @@ message. If that turns out to be a real problem in practice, the
 `APP_CHECK_MODE` toggle lets you drop back to `"monitor"` without
 touching any other code.
 
+## QR code for the waiver page
+
+```bash
+npm install
+npm run generate-qr
+```
+
+Writes `waiver-qr.svg` **into this `waiver-backend/` folder** — not
+into `assets/`, since `assets/` is published to the live site by the
+GitHub Actions deploy and this code is for printing on physical
+materials (signage, flyers, check-in tables), not for display on the
+website itself. `waiver-backend/` is already fully excluded from that
+deploy's allowlist, and `.gcloudignore` also keeps this file (and the
+generator script) out of the Cloud Function's own deploy — so it never
+ends up published anywhere, deliberately.
+
+Deliberately **not** using a URL shortener (Bitly, etc.) either: the
+waiver URL is fixed, short, and already on a domain we own, so there's
+no need for a third party's redirect indirection or an account that
+might turn into a paywall later (as happened with Bitly's free tier).
+Generate this once, done — no ongoing service, no maintenance.
+
+Only re-run this if the waiver's actual URL ever changes.
+
+**Test-scan the output with an actual phone before using it on any
+printed material.** This was generated without the ability to verify a
+real scan; the modules are plain black-on-white deliberately, since
+color reduces contrast and hurts scan reliability in poor lighting or
+low-quality printing — don't recolor it to match the brand palette
+without confirming it still scans reliably afterward.
+
 ## Roadmap
 
 ### Done
@@ -366,3 +397,4 @@ touching any other code.
 - **Waiver retention policy** (e.g. keep on file ~1 year) — a policy
   decision, not a technical one; nothing currently expires Firestore
   records automatically.
+

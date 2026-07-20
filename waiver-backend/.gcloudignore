@@ -1,16 +1,22 @@
-# This file specifies files that are *not* uploaded to Google Cloud
-# using gcloud. It follows the same syntax as .gitignore, with the addition of
-# "#!include" directives (which insert the entries of the given .gitignore-style
-# file at that point).
-#
-# For more information, run:
-#   $ gcloud topic gcloudignore
-#
-.gcloudignore
-# If you would like to upload your .git directory, .gitignore file or files
-# from your .gitignore file, remove the corresponding line
-# below:
+# Files needed to develop/test/document this function, but
+# not needed by the deployed function itself. Keeping these
+# out of the deploy keeps the actual running container's
+# surface area smaller.
+
 .git
 .gitignore
+README.md
+
+# Dev/test-only
+test.js
+sample-payload.json
+bad-payload-missing-ack.json
+bad-payload-signature-mismatch.json
+
+# QR generator: a one-time local tool, not runtime code.
+# Its qrcode dependency is a devDependency for the same
+# reason — see package.json.
+generate-qr.js
+waiver-qr.svg
 
 node_modules
