@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Pink Pistols Denver — Waiver Lookup</title>
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com">
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Archivo+Expanded:wght@600;700&display=swap"
+        rel="stylesheet">
+
+    <link
+        rel="stylesheet"
+        href="../../assets/lookup.css">
+
+</head>
+
+<body>
+
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<header class="hero">
+
+    <img
+        src="../../assets/logo_banner.png"
+        alt="Pink Pistols Denver"
+        class="banner-logo">
+
+    <h1>Waiver Lookup</h1>
+
+    <p class="breadcrumb">
+        <a href="../index.html">&larr; Admin Tools</a>
+    </p>
+
+    <p>
+        For board members and leads to search signed
+        event waivers. Sign in with your Pink Pistols
+        Denver Google account to continue.
+    </p>
+
+</header>
+
+<main id="main-content" class="lookup">
+
+<section id="signin-section" class="card">
+
+    <p>
+        Access is limited to authorized board members
+        and leads. You'll need to sign in with your
+        <strong>@pinkpistolsdenver.org</strong> Google
+        account, and that account must already be on
+        the authorized searchers list.
+    </p>
+
+    <button
+        type="button"
+        id="google-signin-button"
+        class="lookup-button primary">
+
+        Sign in with Google
+
+    </button>
+
+    <p
+        id="signin-error"
+        class="field-error"
+        role="alert"
+        hidden>
+    </p>
+
+</section>
+
+<section id="account-bar" class="account-bar" hidden>
+
+    <span id="account-email"></span>
+
+    <button
+        type="button"
+        id="signout-button"
+        class="lookup-button secondary">
+
+        Sign Out
+
+    </button>
+
+</section>
+
+<section id="search-section" class="card" hidden>
+
+    <form id="search-form">
+
+        <label for="search-query">
+            First name or confirmation number
+        </label>
+
+        <div class="search-row">
+
+            <input
+                type="text"
+                id="search-query"
+                name="query"
+                autocomplete="off"
+                placeholder="e.g. Michelle or PPD-260718-000042"
+                required>
+
+            <button
+                type="submit"
+                id="search-button"
+                class="lookup-button primary">
+
+                Search
+
+            </button>
+
+        </div>
+
+    </form>
+
+    <p
+        id="search-status"
+        class="search-status"
+        aria-live="polite">
+    </p>
+
+</section>
+
+<section id="results-section">
+
+    <ul id="results-list" class="results-list"></ul>
+
+</section>
+
+</main>
+
+<script src="https://www.gstatic.com/firebasejs/12.16.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.16.0/firebase-auth-compat.js"></script>
+
+<script src="../../assets/lookup.js"></script>
+
+</body>
+
+</html>

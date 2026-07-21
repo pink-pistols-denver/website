@@ -332,6 +332,8 @@ function buildRecord(payload, confirmationNumber, req) {
 
     const participant = payload.participant;
 
+    const legalName = safeTrim(participant.legalName);
+
     return {
 
         confirmationNumber,
@@ -339,12 +341,24 @@ function buildRecord(payload, confirmationNumber, req) {
         waiverVersion: payload.version,
 
         participant: {
-            legalName: safeTrim(participant.legalName),
+            legalName,
             email: safeTrim(participant.email) || null,
             electronicSignature: safeTrim(participant.electronicSignature),
             electronicSignatureCertification:
                 participant.electronicSignatureCertification === true
         },
+
+        // Lowercased copy of the name, for the waiver-lookup
+        // tool's search — a plain Firestore prefix/range query
+        // against this field (>= fragment, < fragment+'\uf8ff')
+        // matches by first name, since names are stored as
+        // "First Last" and leads are trained to search by
+        // first name only. Search cost scales with matches,
+        // not with total waivers stored, forever — same
+        // property a token-array approach would have had, at
+        // a fraction of the complexity, since we don't need
+        // to match on any word other than the first.
+        legalNameLower: legalName.toLowerCase(),
 
         acknowledgements: payload.acknowledgements,
 

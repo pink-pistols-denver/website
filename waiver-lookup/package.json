@@ -1,0 +1,19 @@
+{
+  "name": "pink-pistols-denver-waiver-lookup",
+  "version": "1.0.0",
+  "description": "Cloud Function that lets authorized board members/leads search signed Pink Pistols Denver waivers by name fragment or confirmation number.",
+  "main": "index.js",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "functions-framework --target=searchWaivers",
+    "test": "node --test",
+    "deploy": "gcloud functions deploy searchWaivers --gen2 --runtime=nodejs22 --region=us-central1 --source=. --entry-point=searchWaivers --trigger-http --memory=256Mi --max-instances=10"
+  },
+  "dependencies": {
+    "@google-cloud/functions-framework": "^3.4.0",
+    "@google-cloud/firestore": "^7.10.0",
+    "firebase-admin": "^12.7.0"
+  }
+}
