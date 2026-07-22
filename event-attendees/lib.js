@@ -89,8 +89,8 @@ function summarizeAttendees(issuedTickets, ticketTypeNamesById, productNamesById
 
             byOrder.set(key, {
                 name: ticket.full_name ?? "Unknown",
-                ticketTypes: [],
-                merch: []
+                ticketTypeCounts: new Map(),
+                merchCounts: new Map()
             });
 
         }
@@ -101,9 +101,7 @@ function summarizeAttendees(issuedTickets, ticketTypeNamesById, productNamesById
 
             const typeName = ticketTypeNamesById.get(ticket.ticket_type_id) ?? "Unknown ticket type";
 
-            if (!entry.ticketTypes.includes(typeName)) {
-                entry.ticketTypes.push(typeName);
-            }
+            entry.ticketTypeCounts.set(typeName, (entry.ticketTypeCounts.get(typeName) ?? 0) + 1);
 
         }
 
@@ -111,13 +109,36 @@ function summarizeAttendees(issuedTickets, ticketTypeNamesById, productNamesById
 
             const productName = productNamesById.get(ticket.add_on_id) ?? "Unknown item";
 
-            entry.merch.push(productName);
+            entry.merchCounts.set(productName, (entry.merchCounts.get(productName) ?? 0) + 1);
 
         }
 
     }
 
-    return Array.from(byOrder.values());
+    return Array.from(byOrder.values()).map(entry => ({
+        name: entry.name,
+        // "General Admission x2" — count suffixed onto the type,
+        // since it reads naturally in the Ticket column.
+        ticketTypes: formatCounts(entry.ticketTypeCounts, "suffix"),
+        // "2x Embroidered Patch Logo" — count prefixed instead,
+        // since merch renders as standalone badges rather than
+        // inline text (see assets/attendees.js).
+        merch: formatCounts(entry.merchCounts, "prefix")
+    }));
+
+}
+
+function formatCounts(countsByLabel, style) {
+
+    return Array.from(countsByLabel.entries()).map(([label, count]) => {
+
+        if (count <= 1) {
+            return label;
+        }
+
+        return style === "prefix" ? `${count}x ${label}` : `${label} x${count}`;
+
+    });
 
 }
 

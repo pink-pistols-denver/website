@@ -27,9 +27,25 @@ a per-person allowlist.
 ### 1. Create a Ticket Tailor API key
 
 Ticket Tailor dashboard → Box Office Settings → API → create a new API
-key. This is a **read** key (used to fetch events/tickets/products),
-separate from and unrelated to `calendar-sync`'s webhook secret (which
-only verifies *inbound* webhook signatures).
+key, separate from and unrelated to `calendar-sync`'s webhook secret
+(which only verifies *inbound* webhook signatures).
+
+Ticket Tailor's permissions are role-bundles, not per-endpoint scopes,
+and there's no scope named "Products" even though this function reads
+`/v1/products` — that endpoint is bundled under **Event manager**
+(read/write), not **Event read-only**, presumably because add-ons are
+configured alongside an event's ticket types. This function needs:
+
+- **Event manager** (covers `/v1/events` and `/v1/products` — a
+  broader grant than we'd like for a read-only tool, but Ticket
+  Tailor doesn't expose a narrower option for products)
+- **Order read-only** (covers `/v1/issued_tickets`, despite the name
+  — the role description says "orders and issued tickets")
+
+Picking only **Event read-only** + **Order read-only** will 403 on
+`/v1/products` specifically — that's what happened the first time
+this was set up, and cost a while to track down since the error
+looked like a bad key rather than a missing scope.
 
 ### 2. Store it in Secret Manager
 
@@ -43,7 +59,28 @@ printf '%s' 'YOUR_API_KEY_FROM_TICKET_TAILOR' | \
     --data-file=-
 ```
 
-### 3. Enable Google Sign-In in Firebase
+### 3. Grant the function's service account access to the secret
+
+Creating a secret doesn't automatically let anything read it. Without
+this step, deploy fails with a `Permission denied on secret` error
+rather than a working (if unauthorized) function:
+
+```bash
+gcloud secrets add-iam-policy-binding tickettailor-api-key \
+  --project=pinkpistolsdenver-website \
+  --member="serviceAccount:PROJECT_NUMBER-compute@developer.gserviceaccount.com" \
+  --role="roles/secretmanager.secretAccessor"
+```
+
+Replace `PROJECT_NUMBER` with this project's number (visible in the
+error message if you skip this step and hit it on deploy, or via
+`gcloud projects describe pinkpistolsdenver-website
+--format="value(projectNumber)"`). This function doesn't have its own
+dedicated service account (unlike `calendar-sync`) since it needs no
+GCP resource access beyond this one secret — it runs as the default
+Compute Engine service account.
+
+### 4. Enable Google Sign-In in Firebase
 
 Same as `waiver-lookup` — if you've already done that setup (including
 adding `pinkpistolsdenver.org` to Authentication → Settings →

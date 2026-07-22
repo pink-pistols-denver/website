@@ -121,6 +121,44 @@ test("summarizeAttendees keeps separate buyers separate", () => {
 
 });
 
+test("summarizeAttendees counts multiple tickets of the same type for one buyer", () => {
+
+    const issuedTickets = [
+        { order_id: "or_1", full_name: "Michelle Eggleston", status: "valid", ticket_type_id: "tt_ga", add_on_id: null },
+        { order_id: "or_1", full_name: "Michelle Eggleston", status: "valid", ticket_type_id: "tt_ga", add_on_id: null }
+    ];
+
+    const ticketTypeNamesById = new Map([["tt_ga", "General Admission"]]);
+
+    const summary = summarizeAttendees(issuedTickets, ticketTypeNamesById, new Map());
+
+    assert.deepEqual(summary, [
+        { name: "Michelle Eggleston", ticketTypes: ["General Admission x2"], merch: [] }
+    ]);
+
+});
+
+test("summarizeAttendees counts multiple merch purchases of the same item for one buyer", () => {
+
+    const issuedTickets = [
+        { order_id: "or_1", full_name: "Michelle Eggleston", status: "valid", ticket_type_id: null, add_on_id: "pr_patch" },
+        { order_id: "or_1", full_name: "Michelle Eggleston", status: "valid", ticket_type_id: null, add_on_id: "pr_patch" },
+        { order_id: "or_1", full_name: "Michelle Eggleston", status: "valid", ticket_type_id: null, add_on_id: "pr_sticker" }
+    ];
+
+    const productNamesById = new Map([
+        ["pr_patch", "Embroidered Patch Logo"],
+        ["pr_sticker", "Sticker"]
+    ]);
+
+    const summary = summarizeAttendees(issuedTickets, new Map(), productNamesById);
+
+    assert.deepEqual(summary, [
+        { name: "Michelle Eggleston", ticketTypes: [], merch: ["2x Embroidered Patch Logo", "Sticker"] }
+    ]);
+
+});
+
 test("summarizeAttendees falls back gracefully for unknown ticket types and products", () => {
 
     const issuedTickets = [
