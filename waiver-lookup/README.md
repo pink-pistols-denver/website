@@ -39,6 +39,14 @@ Firebase console → Authentication → Sign-in method → enable **Google**.
 Same Firebase project as the waiver App Check setup — no new project
 needed.
 
+Also add the site's real domain(s) to Authentication → Settings →
+**Authorized domains**: `pinkpistolsdenver.org` and
+`www.pinkpistolsdenver.org` (if used). This is separate from the
+sign-in provider toggle above and from the App Check setup — without
+it, `signInWithPopup` opens a popup that immediately closes with
+`auth/unauthorized-domain`, which looks like a generic sign-in
+failure rather than a config problem.
+
 ### 3. Seed the authorized-searchers allowlist
 
 For each board member/lead who should have access, add a document to

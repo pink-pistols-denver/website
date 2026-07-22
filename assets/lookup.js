@@ -305,9 +305,7 @@ function buildResultCard(waiver) {
 
     item.className = "result-card";
 
-    const signedDate = formatDate(
-        waiver.serverMetadata?.receivedAt
-    );
+    const signedDate = formatDate(waiver.signedAt);
 
     const emailLine = waiver.participant?.email
         ? `<div class="result-meta">Email: ${escapeHTML(waiver.participant.email)}</div>`
@@ -321,10 +319,6 @@ function buildResultCard(waiver) {
         <div class="result-meta">Signed: ${escapeHTML(signedDate)}</div>
         ${emailLine}
         ${flagsHTML}
-        <details class="result-details">
-            <summary>View acknowledgements</summary>
-            ${buildAcknowledgementsHTML(waiver)}
-        </details>
     `;
 
     return item;
@@ -360,30 +354,6 @@ function buildFlagsHTML(flags) {
     }
 
     return `<div class="result-flags">${badges.join("")}</div>`;
-
-}
-
-function buildAcknowledgementsHTML(waiver) {
-
-    const groups = [
-        ["Acknowledgements", waiver.acknowledgements],
-        ["Safety Rules", waiver.safetyRules],
-        ["Affirmations", waiver.affirmations]
-    ];
-
-    return groups
-        .map(([title, group]) => {
-
-            const items = Object.entries(group ?? {})
-                .map(([field, checked]) =>
-                    `<li>${escapeHTML(field)}: ${checked ? "Yes" : "No"}</li>`
-                )
-                .join("");
-
-            return `<p><strong>${escapeHTML(title)}</strong></p><ul>${items}</ul>`;
-
-        })
-        .join("");
 
 }
 

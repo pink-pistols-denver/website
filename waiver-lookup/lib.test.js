@@ -138,10 +138,45 @@ test("annotateWaiver does not flag staleness when receivedAt is missing", () => 
     assert.equal(annotated.flags.stale, false);
 });
 
-test("annotateWaiver leaves the original waiver data intact", () => {
+test("annotateWaiver carries over identifying fields", () => {
     const waiver = { waiverVersion: "2026-07-18.2", confirmationNumber: "PPD-260718-000042" };
     const annotated = annotateWaiver(waiver);
     assert.equal(annotated.confirmationNumber, "PPD-260718-000042");
+});
+
+test("annotateWaiver omits acknowledgements, safety rules, and affirmations", () => {
+    const waiver = {
+        waiverVersion: "2026-07-18.2",
+        confirmationNumber: "PPD-260718-000042",
+        acknowledgements: { assumptionOfRisk: true },
+        safetyRules: { safeDirection: true },
+        affirmations: { over18: true }
+    };
+
+    const annotated = annotateWaiver(waiver);
+
+    assert.equal(annotated.acknowledgements, undefined);
+    assert.equal(annotated.safetyRules, undefined);
+    assert.equal(annotated.affirmations, undefined);
+});
+
+test("annotateWaiver includes only legalName and email from participant", () => {
+    const waiver = {
+        waiverVersion: "2026-07-18.2",
+        participant: {
+            legalName: "Michelle Eggleston",
+            email: "michelle@example.com",
+            electronicSignature: "Michelle Eggleston",
+            electronicSignatureCertification: true
+        }
+    };
+
+    const annotated = annotateWaiver(waiver);
+
+    assert.deepEqual(annotated.participant, {
+        legalName: "Michelle Eggleston",
+        email: "michelle@example.com"
+    });
 });
 
 /* ==========================================================

@@ -78,16 +78,26 @@ function normalizeSearchFragment(query) {
 }
 
 /* ==========================================================
-   Result annotation
+   Result shaping
 
-   Adds informational flags for the lead doing the lookup.
-   Never changes the underlying waiver data.
+   A search result only needs enough to identify the waiver
+   and flag it for follow-up — not the full acknowledgement/
+   safety/affirmation checkbox states, which can't vary
+   (the submission form requires all of them checked before
+   it will submit at all, see waiver-backend/index.js's
+   REQUIRED_* field lists).
 ========================================================== */
 
 function annotateWaiver(waiverData) {
 
     return {
-        ...waiverData,
+        confirmationNumber: waiverData.confirmationNumber,
+        waiverVersion: waiverData.waiverVersion,
+        participant: {
+            legalName: waiverData.participant?.legalName ?? null,
+            email: waiverData.participant?.email ?? null
+        },
+        signedAt: waiverData.serverMetadata?.receivedAt ?? null,
         flags: {
             outdatedVersion: waiverData.waiverVersion !== CURRENT_WAIVER_VERSION,
             stale: isStale(waiverData)

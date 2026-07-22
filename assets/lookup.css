@@ -492,23 +492,3 @@ h1, h2, h3, button, .lookup-button {
 
 }
 
-.result-details {
-
-    margin-top: 1rem;
-
-}
-
-.result-details summary {
-
-    cursor: pointer;
-    color: var(--pink);
-    font-weight: bold;
-
-}
-
-.result-details ul {
-
-    margin: .75rem 0 0 1.25rem;
-    color: var(--muted);
-
-}
