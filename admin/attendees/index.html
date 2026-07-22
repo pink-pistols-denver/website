@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Pink Pistols Denver — Upcoming Attendees</title>
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com">
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Archivo+Expanded:wght@600;700&display=swap"
+        rel="stylesheet">
+
+    <link
+        rel="stylesheet"
+        href="../../assets/lookup.css">
+
+    <link
+        rel="stylesheet"
+        href="../../assets/attendees.css">
+
+</head>
+
+<body>
+
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<header class="hero">
+
+    <img
+        src="../../assets/logo_banner.png"
+        alt="Pink Pistols Denver"
+        class="banner-logo">
+
+    <h1>Upcoming Attendees</h1>
+
+    <p class="breadcrumb">
+        <a href="../index.html">&larr; Admin Tools</a>
+    </p>
+
+    <p>
+        Attendee and merch pickup lists for events in the
+        next 48 hours. Sign in with your Pink Pistols
+        Denver Google account to continue.
+    </p>
+
+</header>
+
+<main id="main-content" class="lookup">
+
+<section id="signin-section" class="card">
+
+    <p>
+        Access is limited to <strong>@pinkpistolsdenver.org</strong>
+        Google accounts.
+    </p>
+
+    <button
+        type="button"
+        id="google-signin-button"
+        class="lookup-button primary">
+
+        Sign in with Google
+
+    </button>
+
+    <p
+        id="signin-error"
+        class="field-error"
+        role="alert"
+        hidden>
+    </p>
+
+</section>
+
+<section id="account-bar" class="account-bar" hidden>
+
+    <span id="account-email"></span>
+
+    <button
+        type="button"
+        id="signout-button"
+        class="lookup-button secondary">
+
+        Sign Out
+
+    </button>
+
+</section>
+
+<section id="status-section" hidden>
+
+    <p
+        id="load-status"
+        class="search-status"
+        aria-live="polite">
+    </p>
+
+    <button
+        type="button"
+        id="refresh-button"
+        class="lookup-button secondary">
+
+        Refresh
+
+    </button>
+
+</section>
+
+<section id="events-section">
+
+    <ul id="events-list" class="events-list"></ul>
+
+</section>
+
+</main>
+
+<script src="https://www.gstatic.com/firebasejs/12.16.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.16.0/firebase-auth-compat.js"></script>
+
+<script src="../../assets/attendees.js"></script>
+
+</body>
+
+</html>

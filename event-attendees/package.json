@@ -1,0 +1,18 @@
+{
+  "name": "pink-pistols-denver-event-attendees",
+  "version": "1.0.0",
+  "description": "Cloud Function that lists attendees and pre-purchased merch for Pink Pistols Denver events in the next 48 hours.",
+  "main": "index.js",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "functions-framework --target=getUpcomingAttendees",
+    "test": "node --test",
+    "deploy": "gcloud functions deploy getUpcomingAttendees --gen2 --runtime=nodejs22 --region=us-central1 --source=. --entry-point=getUpcomingAttendees --trigger-http --memory=256Mi --max-instances=10 --set-secrets=TICKETTAILOR_API_KEY=tickettailor-api-key:latest"
+  },
+  "dependencies": {
+    "@google-cloud/functions-framework": "^3.4.0",
+    "firebase-admin": "^12.7.0"
+  }
+}

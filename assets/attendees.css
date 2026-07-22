@@ -1,0 +1,114 @@
+#status-section {
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin: 1.5rem 0;
+
+}
+
+#status-section .search-status {
+
+    margin-top: 0;
+
+}
+
+.events-list {
+
+    list-style: none;
+
+}
+
+.event-card {
+
+    background: var(--card);
+    border: 1px solid #333;
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--shadow);
+
+}
+
+.event-name {
+
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: .25rem;
+
+}
+
+.event-meta {
+
+    color: var(--muted);
+    font-size: .9rem;
+    margin-bottom: 1rem;
+
+}
+
+.attendee-table {
+
+    width: 100%;
+    border-collapse: collapse;
+
+}
+
+.attendee-table th,
+.attendee-table td {
+
+    text-align: left;
+    padding: .6rem .5rem;
+    border-bottom: 1px solid #333;
+    font-size: .95rem;
+
+}
+
+.attendee-table th {
+
+    color: var(--muted);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: .75rem;
+    letter-spacing: .05em;
+
+}
+
+.merch-badge {
+
+    display: inline-block;
+    background: rgba(255, 69, 202, .15);
+    color: var(--pink);
+    border: 1px solid var(--pink);
+    border-radius: 999px;
+    padding: .2rem .6rem;
+    font-size: .8rem;
+    font-weight: 700;
+    margin: .15rem .3rem .15rem 0;
+
+}
+
+.no-events {
+
+    color: var(--muted);
+    text-align: center;
+    padding: 2rem 0;
+
+}
+
+@media (max-width: 500px) {
+
+    #status-section {
+
+        flex-direction: column;
+        align-items: stretch;
+
+    }
+
+    .attendee-table {
+
+        font-size: .85rem;
+
+    }
+
+}
