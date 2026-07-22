@@ -360,6 +360,12 @@ without confirming it still scans reliably afterward.
 - ✓ Firestore persistence
 - ✓ App Check + reCAPTCHA v3 (enforced)
 - ✓ WCAG accessibility audit
+- ✓ Trusted-lead lookup/check-in tool — see `waiver-lookup/`
+- ✓ Search by confirmation number — part of `waiver-lookup/`
+- ✓ Waiver retention policy — waivers are kept on file indefinitely
+  (nothing auto-deletes), but only treated as "in effect" for 1 year;
+  `waiver-lookup/lib.js`'s `stale` flag surfaces anything past that
+  to a lead as a manual judgment call rather than hiding or deleting it.
 
 ### Not planned (deliberately decided against, not overlooked)
 
@@ -374,27 +380,25 @@ without confirming it still scans reliably afterward.
 - **Automated billing kill-switch** (Pub/Sub-triggered auto-disable) —
   the existing budget alert plus the bounded worst-case cost from
   `--max-instances` is sufficient
+- **Event selection / association per submission** — waivers are
+  valid for a fixed term (currently 1 year) rather than tied to a
+  specific event, so there's no need to know which event a given
+  submission belongs to.
+- **Event capacity lookup** — likely would have depended on the
+  event-association work above, which is dropped; no longer has a
+  clear purpose without it.
+- **Email confirmation email** — decided against due to the ongoing
+  concern and complexity of running an SMTP setup. The Download
+  button on the success page covers "get a copy of what you signed"
+  instead, without needing an email service at all.
+- **Signed PDF generation** — the Download button's HTML copy is a
+  faithful, self-contained record of exactly what was signed, and
+  anyone who needs a literal PDF can print it to one; a separate PDF
+  generation path would be duplicative.
 
 ### Post-1.0 (deferred, not dropped)
 
-- **Trusted-lead lookup/check-in tool** for the waivers collection.
-  Trust model: all board members + leads (~10 known individuals)
-  should have access. Suggested low-effort approach when this gets
-  built: Google Sign-In restricted to an allowlist of their emails,
-  rather than building real user management.
-- **Event selection / association per submission** — a prerequisite
-  for the lookup tool above, and for real email confirmation (right
-  now there's no way to know which event a given waiver belongs to).
-- **Event capacity lookup**
-- **Search by confirmation number**
-- **Email confirmation email** — no timeline, but not dropped. The
-  Download button on the success page covers "get a copy of what you
-  signed" for now without needing an email service at all.
-- **Signed PDF generation**
 - **Emergency contact information** — good idea, but needs careful
   design given the LGBTQ community context (e.g. a contact may not be
   supportive of or aware of someone's participation).
-- **Waiver retention policy** (e.g. keep on file ~1 year) — a policy
-  decision, not a technical one; nothing currently expires Firestore
-  records automatically.
 
