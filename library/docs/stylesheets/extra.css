@@ -1,0 +1,100 @@
+/* ==========================================================
+   Pink Pistols Denver brand overrides for Zensical's default
+   theme, so the library reads as part of the same site
+   rather than a generic docs tool bolted on.
+
+   Colors and heading font are copied from assets/waiver.css's
+   :root — that's the source of truth for the brand palette,
+   kept in sync manually since this is a separate build
+   (Zensical) from the plain HTML/CSS pages.
+========================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Expanded:wght@600;700&display=swap');
+
+:root {
+    --ppd-pink: #FF45CA;
+    --ppd-pink-on-white: #B2308D;
+    --ppd-blue: #185AA0;
+    --ppd-dark: #111111;
+    --ppd-dark2: #1B1B1B;
+    --ppd-card: #202020;
+    --ppd-text: #F5F5F5;
+    --ppd-muted: #CFCFCF;
+}
+
+/* ==========================================================
+   Typography — headings and nav titles use the same display
+   font as the rest of the site (h1/h2/h3/buttons in
+   assets/style.css and assets/waiver.css). Body text is left
+   as Zensical's default rather than forced to match the main
+   site's plain Arial, since Archivo Expanded isn't meant for
+   long-form reading and the main site never uses it for body
+   copy either.
+========================================================== */
+
+.md-header__title,
+.md-nav__title,
+.md-typeset h1,
+.md-typeset h2,
+.md-typeset h3,
+.md-typeset h4 {
+    font-family: "Archivo Expanded", Arial, sans-serif;
+    letter-spacing: .03em;
+}
+
+/* ==========================================================
+   Header — same gradient used on every hero header across
+   the site.
+========================================================== */
+
+.md-header {
+    background: linear-gradient(135deg, var(--ppd-pink-on-white), var(--ppd-blue));
+}
+
+/* ==========================================================
+   Links and accents, both color schemes.
+========================================================== */
+
+.md-typeset a,
+.md-typeset a:visited {
+    color: var(--ppd-pink) !important;
+}
+
+.md-typeset a:hover,
+.md-typeset a:focus {
+    color: var(--ppd-blue) !important;
+}
+
+.md-nav__link--active,
+.md-nav__link--active > .md-ellipsis,
+.md-nav__link:is(:focus, :hover) {
+    color: var(--ppd-pink) !important;
+}
+
+[data-md-color-accent] {
+    --md-accent-fg-color: var(--ppd-pink);
+}
+
+/* ==========================================================
+   Dark scheme — swaps Material's algorithmic slate hues for
+   the site's actual dark/card colors, so it's an exact match
+   rather than an approximation. This is the scheme shown by
+   default (see zensical.toml) since the rest of the site has
+   no light mode at all.
+========================================================== */
+
+[data-md-color-scheme="slate"] {
+    --md-default-bg-color: var(--ppd-dark);
+    --md-default-fg-color: var(--ppd-text);
+    --md-default-fg-color--light: var(--ppd-muted);
+    --md-default-fg-color--lighter: #666666;
+    --md-default-fg-color--lightest: #333333;
+    --md-code-bg-color: var(--ppd-dark2);
+    --md-footer-bg-color: var(--ppd-dark2);
+    --md-footer-bg-color--dark: var(--ppd-dark);
+    --md-typeset-a-color: var(--ppd-pink);
+}
+
+[data-md-color-scheme="slate"] .md-typeset table:not([class]) {
+    background-color: var(--ppd-card);
+}
