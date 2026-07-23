@@ -1,7 +1,7 @@
 "use strict";
 
 const functions = require("@google-cloud/functions-framework");
-const { Firestore } = require("@google-cloud/firestore");
+const { Firestore, FieldPath } = require("@google-cloud/firestore");
 const admin = require("firebase-admin");
 
 const {
@@ -9,6 +9,7 @@ const {
     isAuthorizedDomain,
     normalizeSearchFragment,
     isPlausibleConfirmationNumber,
+    normalizeConfirmationNumberQuery,
     annotateWaiver
 } = require("./lib.js");
 
@@ -67,7 +68,7 @@ functions.http("searchWaivers", async (req, res) => {
         let results;
 
         if (isPlausibleConfirmationNumber(query)) {
-            results = await searchByConfirmationNumber(query);
+            results = await searchByConfirmationNumber(normalizeConfirmationNumberQuery(query));
         }
 
         else {
@@ -183,17 +184,19 @@ async function searchByNameToken(fragment) {
 
 }
 
-async function searchByConfirmationNumber(confirmationNumber) {
+async function searchByConfirmationNumber(prefix) {
 
-    const doc = await firestore
+    // Range query on document ID rather than a single .doc().get()
+    // — waiver doc IDs are the confirmation number itself, so this
+    // matches any number of waivers sharing a prefix (e.g. a whole
+    // day's worth via the date code) as well as one exact number.
+    const snapshot = await firestore
         .collection("waivers")
-        .doc(confirmationNumber.trim().toUpperCase())
+        .where(FieldPath.documentId(), ">=", prefix)
+        .where(FieldPath.documentId(), "<", prefix + "\uf8ff")
+        .limit(MAX_RESULTS)
         .get();
 
-    if (!doc.exists) {
-        return [];
-    }
-
-    return [annotateWaiver(doc.data())];
+    return snapshot.docs.map(doc => annotateWaiver(doc.data()));
 
 }

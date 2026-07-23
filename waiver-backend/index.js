@@ -433,12 +433,31 @@ function buildConfirmationNumber() {
 
     const now = new Date();
 
-    const datePart =
-        now.toISOString().slice(2, 10).replace(/-/g, "");
+    const datePart = denverDateCode(now);
 
     const randomPart =
         String(crypto.randomInt(0, 1000000)).padStart(6, "0");
 
     return `PPD-${datePart}-${randomPart}`;
+
+}
+
+// The date code is meant to read as "the day this was signed" to
+// leads searching by it (see waiver-lookup's partial-match search),
+// so it needs to reflect Denver local time, not UTC — otherwise an
+// evening signature during Mountain Daylight Time (UTC-6) rolls over
+// into the next UTC day and shows tomorrow's date.
+function denverDateCode(date) {
+
+    const parts = new Intl.DateTimeFormat("en-US", {
+        timeZone: "America/Denver",
+        year: "2-digit",
+        month: "2-digit",
+        day: "2-digit"
+    }).formatToParts(date);
+
+    const get = type => parts.find(part => part.type === type).value;
+
+    return `${get("year")}${get("month")}${get("day")}`;
 
 }

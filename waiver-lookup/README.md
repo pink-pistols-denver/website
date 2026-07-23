@@ -6,6 +6,11 @@ request: the caller must sign in with a `pinkpistolsdenver.org` Google
 account, **and** that specific email must be listed in a Firestore
 allowlist — being on the Workspace domain alone is not enough.
 
+Confirmation-number search is a prefix match, not an exact match —
+searching just the date code (e.g. `PPD-260722`, no random suffix)
+returns every waiver signed that day, same idea as the name-fragment
+search below.
+
 Search cost is proportional to matches, not to total waivers stored,
 forever — see `legalNameLower` in `waiver-backend/index.js` and the
 design discussion this came out of. No caching, no full-collection

@@ -13,7 +13,12 @@ const MAX_RESULTS = 25;
 const MIN_FRAGMENT_LENGTH = 2;
 const MAX_FRAGMENT_LENGTH = 100;
 
-const CONFIRMATION_NUMBER_PATTERN = /^PPD-\d{6}-\d{6}$/i;
+// Confirmation numbers are always "PPD-<something>" — anything
+// starting with that prefix is treated as a (possibly partial)
+// confirmation number search rather than a name fragment. Partial
+// is deliberate: "PPD-260722" (the date code with no random suffix)
+// finds every waiver signed that day, not just one exact number.
+const CONFIRMATION_NUMBER_PREFIX = "PPD-";
 
 // Must match waiver-backend/index.js's CURRENT_WAIVER_VERSION.
 // Waivers recorded under any other version are flagged so a
@@ -57,7 +62,17 @@ function isPlausibleConfirmationNumber(query) {
         return false;
     }
 
-    return CONFIRMATION_NUMBER_PATTERN.test(query.trim());
+    return query.trim().toUpperCase().startsWith(CONFIRMATION_NUMBER_PREFIX);
+
+}
+
+// Trimmed + uppercased, ready to use as a Firestore document-ID
+// range prefix (waiver doc IDs are the confirmation number itself,
+// already stored uppercase — see buildConfirmationNumber in
+// waiver-backend/index.js).
+function normalizeConfirmationNumberQuery(query) {
+
+    return query.trim().toUpperCase();
 
 }
 
@@ -142,5 +157,6 @@ module.exports = {
     isAuthorizedDomain,
     normalizeSearchFragment,
     isPlausibleConfirmationNumber,
+    normalizeConfirmationNumberQuery,
     annotateWaiver
 };

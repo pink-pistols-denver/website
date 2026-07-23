@@ -8,6 +8,7 @@ const {
     isAuthorizedDomain,
     normalizeSearchFragment,
     isPlausibleConfirmationNumber,
+    normalizeConfirmationNumberQuery,
     annotateWaiver
 } = require("./lib.js");
 
@@ -45,20 +46,37 @@ test("isAuthorizedDomain rejects a missing token", () => {
    isPlausibleConfirmationNumber
 ========================================================== */
 
-test("isPlausibleConfirmationNumber accepts the PPD-YYMMDD-NNNNNN shape", () => {
+test("isPlausibleConfirmationNumber accepts the full PPD-YYMMDD-NNNNNN shape", () => {
     assert.equal(isPlausibleConfirmationNumber("PPD-260718-000042"), true);
+});
+
+test("isPlausibleConfirmationNumber accepts a partial date-code prefix", () => {
+    assert.equal(isPlausibleConfirmationNumber("PPD-260722"), true);
+});
+
+test("isPlausibleConfirmationNumber accepts the bare prefix", () => {
+    assert.equal(isPlausibleConfirmationNumber("PPD-"), true);
 });
 
 test("isPlausibleConfirmationNumber is case-insensitive and trims whitespace", () => {
     assert.equal(isPlausibleConfirmationNumber("  ppd-260718-000042  "), true);
+    assert.equal(isPlausibleConfirmationNumber("  ppd-260722  "), true);
 });
 
 test("isPlausibleConfirmationNumber rejects a name fragment", () => {
     assert.equal(isPlausibleConfirmationNumber("michelle"), false);
 });
 
-test("isPlausibleConfirmationNumber rejects a malformed confirmation number", () => {
-    assert.equal(isPlausibleConfirmationNumber("PPD-2607-000042"), false);
+test("isPlausibleConfirmationNumber rejects a non-string query", () => {
+    assert.equal(isPlausibleConfirmationNumber(undefined), false);
+});
+
+/* ==========================================================
+   normalizeConfirmationNumberQuery
+========================================================== */
+
+test("normalizeConfirmationNumberQuery trims and uppercases", () => {
+    assert.equal(normalizeConfirmationNumberQuery("  ppd-260722  "), "PPD-260722");
 });
 
 /* ==========================================================
