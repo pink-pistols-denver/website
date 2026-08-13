@@ -1,9 +1,16 @@
 # Pink Pistols Denver — Upcoming Attendees
 
 Lets any signed-in board member/lead/volunteer see who's registered
-and what merch they pre-purchased for events happening in the next 48
-hours — a live pass-through to Ticket Tailor's API, not a copy of
-anything. Nothing is stored; every request re-fetches fresh data.
+and what merch they pre-purchased for upcoming, in-progress, or
+recently-finished events — a live pass-through to Ticket Tailor's API,
+not a copy of anything. Nothing is stored; every request re-fetches
+fresh data.
+
+An event is visible if it starts within the next `WINDOW_HOURS` (48)
+**or** hasn't been over for more than `LOOKBACK_HOURS` (3) — using its
+actual end time, not just its start, so it stays visible for its
+whole real runtime rather than vanishing the moment it starts. See
+`isWithinWindow` in `lib.js`.
 
 ## Access model
 
@@ -12,9 +19,9 @@ signed in with a `pinkpistolsdenver.org` Google account — there's no
 Firestore allowlist to maintain. Two things make that an acceptable
 trade for this tool specifically:
 
-- **Scope is narrow and short-lived.** Only events starting in the
-  next 48 hours are ever visible — there's no way to browse further
-  out or look up history.
+- **Scope is narrow and short-lived.** Only events starting soon,
+  in progress, or recently finished are ever visible — there's no way
+  to browse further out or look up history.
 - **No email addresses are surfaced.** The response only ever includes
   attendee name, ticket type, and merch — see `summarizeAttendees` in
   `lib.js`.

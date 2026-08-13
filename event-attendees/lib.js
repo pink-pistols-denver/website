@@ -17,6 +17,13 @@ const AUTHORIZED_DOMAIN = "pinkpistolsdenver.org";
 // reasonable for this tool.
 const WINDOW_HOURS = 48;
 
+// How long an event stays visible after its listed end time —
+// covers both "the event is still running" (most of the time,
+// since this is smaller than most run times) and "it just wrapped
+// up and someone still needs the pickup list," without keeping
+// old events around indefinitely.
+const LOOKBACK_HOURS = 3;
+
 /* ==========================================================
    Auth
 
@@ -45,6 +52,11 @@ function isAuthorizedDomain(decodedToken) {
 
 /* ==========================================================
    Event Window
+
+   An event is shown if it starts within the next WINDOW_HOURS
+   *and* hasn't been over for more than LOOKBACK_HOURS — so it
+   stays visible for its entire actual runtime (using the real
+   end time, not just its start), plus a grace period after.
 ========================================================== */
 
 function isWithinWindow(event, now = new Date()) {
@@ -55,10 +67,15 @@ function isWithinWindow(event, now = new Date()) {
         return false;
     }
 
+    // Falls back to the start time if there's no end time, so a
+    // malformed event doesn't stay visible forever.
+    const endUnix = typeof event?.end?.unix === "number" ? event.end.unix : startUnix;
+
     const startMs = startUnix * 1000;
+    const cutoffMs = endUnix * 1000 + LOOKBACK_HOURS * 60 * 60 * 1000;
     const windowEndMs = now.getTime() + WINDOW_HOURS * 60 * 60 * 1000;
 
-    return startMs >= now.getTime() && startMs <= windowEndMs;
+    return startMs <= windowEndMs && now.getTime() <= cutoffMs;
 
 }
 
@@ -144,6 +161,7 @@ function formatCounts(countsByLabel, style) {
 
 module.exports = {
     WINDOW_HOURS,
+    LOOKBACK_HOURS,
     isAuthorizedDomain,
     isWithinWindow,
     summarizeAttendees

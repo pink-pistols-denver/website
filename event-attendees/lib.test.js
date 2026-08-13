@@ -5,6 +5,7 @@ const assert = require("node:assert/strict");
 
 const {
     WINDOW_HOURS,
+    LOOKBACK_HOURS,
     isAuthorizedDomain,
     isWithinWindow,
     summarizeAttendees
@@ -51,9 +52,45 @@ test("isWithinWindow accepts an event starting in 10 hours", () => {
     assert.equal(isWithinWindow(event, NOW), true);
 });
 
-test("isWithinWindow rejects an event that already started", () => {
-    const event = { start: { unix: Math.floor(NOW.getTime() / 1000) - 60 } };
+test("isWithinWindow accepts an event that's currently running", () => {
+    const nowUnix = Math.floor(NOW.getTime() / 1000);
+    const event = {
+        start: { unix: nowUnix - 30 * 60 },
+        end: { unix: nowUnix + 90 * 60 }
+    };
+    assert.equal(isWithinWindow(event, NOW), true);
+});
+
+test("isWithinWindow accepts an event that ended within the lookback buffer", () => {
+    const nowUnix = Math.floor(NOW.getTime() / 1000);
+    const event = {
+        start: { unix: nowUnix - 4 * 60 * 60 },
+        end: { unix: nowUnix - 1 * 60 * 60 }
+    };
+    assert.equal(isWithinWindow(event, NOW), true);
+});
+
+test(`isWithinWindow rejects an event that ended more than ${LOOKBACK_HOURS}h ago`, () => {
+    const nowUnix = Math.floor(NOW.getTime() / 1000);
+    const event = {
+        start: { unix: nowUnix - 6 * 60 * 60 },
+        end: { unix: nowUnix - (LOOKBACK_HOURS + 1) * 60 * 60 }
+    };
     assert.equal(isWithinWindow(event, NOW), false);
+});
+
+test("isWithinWindow falls back to the start time when there's no end time", () => {
+    const nowUnix = Math.floor(NOW.getTime() / 1000);
+
+    // Started just under the lookback buffer ago, no end field —
+    // should still count as recent using start as a stand-in.
+    const recentNoEnd = { start: { unix: nowUnix - (LOOKBACK_HOURS - 1) * 60 * 60 } };
+    assert.equal(isWithinWindow(recentNoEnd, NOW), true);
+
+    // Started well past the lookback buffer ago, no end field —
+    // should now be excluded.
+    const staleNoEnd = { start: { unix: nowUnix - (LOOKBACK_HOURS + 1) * 60 * 60 } };
+    assert.equal(isWithinWindow(staleNoEnd, NOW), false);
 });
 
 test(`isWithinWindow rejects an event starting after ${WINDOW_HOURS}h`, () => {

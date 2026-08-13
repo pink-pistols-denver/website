@@ -227,8 +227,8 @@ async function loadAttendees() {
 
         setLoadStatus(
             events.length === 0
-                ? "No events in the next 48 hours."
-                : `${events.length} event${events.length === 1 ? "" : "s"} in the next 48 hours.`,
+                ? "Nothing upcoming, in progress, or recently finished."
+                : `${events.length} event${events.length === 1 ? "" : "s"} upcoming, in progress, or recently finished.`,
             false
         );
 
@@ -277,7 +277,7 @@ function renderEvents(events) {
         const empty = document.createElement("li");
 
         empty.className = "no-events";
-        empty.textContent = "Nothing in the next 48 hours.";
+        empty.textContent = "Nothing upcoming, in progress, or recently finished.";
 
         ui.eventsList.appendChild(empty);
 

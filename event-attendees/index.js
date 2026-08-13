@@ -67,7 +67,7 @@ functions.http("getUpcomingAttendees", async (req, res) => {
 
         const events = await getUpcomingEventsWithAttendees();
 
-        console.log(`Attendee list viewed by ${authorizedEmail}: ${events.length} event(s) in the next ${WINDOW_HOURS}h.`);
+        console.log(`Attendee list viewed by ${authorizedEmail}: ${events.length} event(s) starting within ${WINDOW_HOURS}h or still recent.`);
 
         res.status(200).json({ events });
 
