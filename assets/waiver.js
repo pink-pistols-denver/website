@@ -12,6 +12,24 @@ const CONFIG = {
 
 };
 
+// Shown when the server rejects a submission specifically because no
+// App Check token was attached — distinct from other failures because
+// it has a known, common cause (a content/ad blocker, or a browser
+// privacy setting like Safari's "Prevent Cross-Site Tracking"
+// blocking Google's reCAPTCHA script) and a real fallback (paper).
+const APP_CHECK_BLOCKED_MESSAGE =
+    "Your browser blocked a security check we require before " +
+    "submitting. This can happen with ad blockers, other privacy " +
+    "browser extensions, or a setting like Safari's \"Prevent " +
+    "Cross-Site Tracking.\" Try turning that off for this site, or " +
+    "try a different browser. If it still won't go through, ask an " +
+    "instructor for a paper waiver instead — we can process that " +
+    "just as easily.";
+
+const NETWORK_ERROR_MESSAGE =
+    "Could not reach the server. Check your internet connection " +
+    "and try again.";
+
 /* ==========================================================
    Firebase App Check
 
@@ -838,8 +856,10 @@ async function handleSubmit(event) {
 
         console.error(error);
 
-        alert(
-            "Unable to submit your waiver. Please try again."
+        showValidationMessage(
+            ui.pages[state.currentPage],
+            error.message ||
+                "Unable to submit your waiver. Please try again."
         );
 
         submitButton.disabled = false;
@@ -864,6 +884,8 @@ async function postToGoogleCloud(payload) {
 
     };
 
+    let appCheckTokenObtained = false;
+
     try {
 
         if (appCheck) {
@@ -873,6 +895,8 @@ async function postToGoogleCloud(payload) {
 
             headers["X-Firebase-AppCheck"] =
                 appCheckTokenResult.token;
+
+            appCheckTokenObtained = true;
 
         }
 
@@ -884,7 +908,10 @@ async function postToGoogleCloud(payload) {
         // load (network issue, blocked script),
         // let the request through without a token.
         // The Cloud Function's rollout mode decides
-        // whether that's acceptable.
+        // whether that's acceptable. If it rejects
+        // for exactly this reason, the response
+        // handling below gives the user a specific,
+        // actionable message instead of a generic one.
         console.warn(
             "Could not get App Check token:",
             error
@@ -892,24 +919,41 @@ async function postToGoogleCloud(payload) {
 
     }
 
-    const response =
+    let response;
 
-        await fetch(
+    try {
 
-            CONFIG.apiEndpoint,
+        response =
 
-            {
+            await fetch(
 
-                method: "POST",
+                CONFIG.apiEndpoint,
 
-                headers,
+                {
 
-                body:
-                    JSON.stringify(payload)
+                    method: "POST",
 
-            }
+                    headers,
 
+                    body:
+                        JSON.stringify(payload)
+
+                }
+
+            );
+
+    }
+
+    catch (networkError) {
+
+        console.error(
+            "Network error submitting waiver:",
+            networkError
         );
+
+        throw new Error(NETWORK_ERROR_MESSAGE);
+
+    }
 
     if (!response.ok) {
 
@@ -918,6 +962,10 @@ async function postToGoogleCloud(payload) {
             await response
                 .json()
                 .catch(() => null);
+
+        if (response.status === 401 && !appCheckTokenObtained) {
+            throw new Error(APP_CHECK_BLOCKED_MESSAGE);
+        }
 
         throw new Error(
 
