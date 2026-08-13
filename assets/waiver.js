@@ -615,6 +615,8 @@ function clearValidation() {
 
         );
 
+    hideSubmissionTroubleshooting();
+
 }
 
 function showValidationMessage(
@@ -862,11 +864,50 @@ async function handleSubmit(event) {
                 "Unable to submit your waiver. Please try again."
         );
 
+        // Only the two failure modes plausibly caused by a browser
+        // privacy/blocking setting get the troubleshooting steps —
+        // not, say, a stale-waiver-version error from the server,
+        // where those steps would just be confusing noise.
+        if (
+            error.message === APP_CHECK_BLOCKED_MESSAGE ||
+            error.message === NETWORK_ERROR_MESSAGE
+        ) {
+
+            showSubmissionTroubleshooting();
+
+        }
+
         submitButton.disabled = false;
 
         submitButton.textContent =
             "Submit Waiver";
 
+    }
+
+}
+
+function showSubmissionTroubleshooting() {
+
+    const section =
+        document.getElementById(
+            "submission-troubleshooting"
+        );
+
+    if (section) {
+        section.hidden = false;
+    }
+
+}
+
+function hideSubmissionTroubleshooting() {
+
+    const section =
+        document.getElementById(
+            "submission-troubleshooting"
+        );
+
+    if (section) {
+        section.hidden = true;
     }
 
 }
