@@ -55,13 +55,34 @@
    Links and accents, both color schemes.
 ========================================================== */
 
-.md-typeset a,
-.md-typeset a:visited {
-    color: var(--ppd-pink) !important;
+/* Light pink when unvisited, darker magenta once visited.
+   Contrast on the #111 dark background: 10.4:1 and 5.4:1. The
+   light scheme uses deeper pinks so links stay readable on white
+   (5.7:1 and 8.2:1). */
+
+[data-md-color-scheme="slate"] .md-typeset a:link {
+    color: #FFA3E4 !important;
 }
 
-.md-typeset a:hover,
-.md-typeset a:focus {
+[data-md-color-scheme="slate"] .md-typeset a:visited {
+    color: #D65BB8 !important;
+}
+
+[data-md-color-scheme="slate"] .md-typeset a:hover,
+[data-md-color-scheme="slate"] .md-typeset a:focus {
+    color: #FFD1F2 !important;
+}
+
+[data-md-color-scheme="default"] .md-typeset a:link {
+    color: var(--ppd-pink-on-white) !important;
+}
+
+[data-md-color-scheme="default"] .md-typeset a:visited {
+    color: #8A2275 !important;
+}
+
+[data-md-color-scheme="default"] .md-typeset a:hover,
+[data-md-color-scheme="default"] .md-typeset a:focus {
     color: var(--ppd-blue) !important;
 }
 
@@ -92,7 +113,7 @@
     --md-code-bg-color: var(--ppd-dark2);
     --md-footer-bg-color: var(--ppd-dark2);
     --md-footer-bg-color--dark: var(--ppd-dark);
-    --md-typeset-a-color: var(--ppd-pink);
+    --md-typeset-a-color: #FFA3E4;
 }
 
 [data-md-color-scheme="slate"] .md-typeset table:not([class]) {

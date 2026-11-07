@@ -12,6 +12,10 @@
     --text: #F5F5F5;
     --muted: #CFCFCF;
 
+    --link: #FFA3E4;
+    --link-visited: #D65BB8;
+    --link-hover: #FFD1F2;
+
     --success: #30C46C;
     --warning: #FFCC33;
     --danger: #FF5B5B;
@@ -23,6 +27,31 @@
 
     --shadow:
         0 6px 18px rgba(0,0,0,.30);
+
+}
+
+/* ==========================================================
+   LINKS — light pink when unvisited, darker magenta once
+   visited (10.4:1 and 5.4:1 on the #111 background).
+   :where() keeps specificity at zero so .breadcrumb a,
+   .admin-tool-link and other styled links keep their colors.
+========================================================== */
+
+:where(a:link) {
+
+    color: var(--link);
+
+}
+
+:where(a:visited) {
+
+    color: var(--link-visited);
+
+}
+
+:where(a:hover, a:focus-visible) {
+
+    color: var(--link-hover);
 
 }
 
