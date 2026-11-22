@@ -9,7 +9,13 @@
    (Zensical) from the plain HTML/CSS pages.
 ========================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Archivo+Expanded:wght@600;700&display=swap');
+@font-face {
+    font-family: "Zalando Sans Expanded";
+    src: url('../fonts/ZalandoSansExpanded.woff2') format('woff2');
+    font-weight: 200 900;
+    font-style: normal;
+    font-display: swap;
+}
 
 :root {
     --ppd-pink: #FF45CA;
@@ -27,7 +33,7 @@
    font as the rest of the site (h1/h2/h3/buttons in
    assets/style.css and assets/waiver.css). Body text is left
    as Zensical's default rather than forced to match the main
-   site's plain Arial, since Archivo Expanded isn't meant for
+   site's plain Arial, since Zalando Sans Expanded isn't meant for
    long-form reading and the main site never uses it for body
    copy either.
 ========================================================== */
@@ -38,7 +44,7 @@
 .md-typeset h2,
 .md-typeset h3,
 .md-typeset h4 {
-    font-family: "Archivo Expanded", Arial, sans-serif;
+    font-family: "Zalando Sans Expanded", Arial, sans-serif;
     letter-spacing: .03em;
 }
 
